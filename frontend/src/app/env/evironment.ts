@@ -3,5 +3,5 @@ export const environment = {
   apiUrl: 'http://localhost:4000/api',
   apiUrl2: 'http://localhost:4000/api',
   authUrl: 'http://localhost:4000',
-  razorpayKeyId: 'rzp_test_OBrOJPPI806lp6',
+  razorpayKeyId: 'your_razorpay_id',
 };
