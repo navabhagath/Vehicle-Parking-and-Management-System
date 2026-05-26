@@ -1,0 +1,74 @@
+// FFDF66 - yellow
+// 33AD5F - green
+// 4BD2F8 - bar graph
+// D0D0D0 - background white
+// 130F26 - navy black (signout)
+// 2F2F2F - button black, text black
+// F7F7F7 - input field color
+// FFFFFF - text white
+// linear gradient(FCFCFE, EBEBEB) - darkish background
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+@import '@angular/material/prebuilt-themes/indigo-pink.css';
+:root {
+  --primary-font: 'Montserrat', sans-serif;
+}
+
+$min-contrast-ratio: 3.0;
+$grey-stroke: #D0D0D0; //background white
+$green: #33AD5F;       //green
+$yellow: #FFDF66;
+$black: #2F2F2F;
+$input: #F7F7F7;
+$navy-black: #130F26;  // contrasting buttons with white text eg checkin button in customer
+$light-blue: #4BD2F8;  //used in bar graphs and border of some buttons
+// $red: #FB495E;
+$red: #f32c44;
+$white: #fcfcfc;
+$bg-color: #fcfcfe;
+$shadow : #575757;
+
+$theme-colors: (
+  "grey-stroke": $grey-stroke,
+  "green":       $green,
+  "yellow":      $yellow,
+  "black":       $black,
+  "navy-black":  $navy-black,
+  "light-blue":  $light-blue,
+  "red":         $red,
+  "white":       $white,
+  "bg-color":    $bg-color,
+  "input":       $input,
+  "shadow":      $shadow
+);
+
+@import "../node_modules/bootstrap/scss/bootstrap";
+
+body {
+  color: $black;
+  background-color: $bg-color;
+  font-family: var(--primary-font);
+}
+
+.form-check-input:checked {
+    background-color: $green; /* Bootstrap success green */
+    border-color: $green;
+}
+
+.shadow-premium {
+  box-shadow: 1px 1px 9.9px -1px rgba(87, 87, 87, 0.25) !important;
+}
+
+.custom-backdrop {
+  background: rgba(0, 0, 0, 0.3) !important;
+}
+
+// Prevent body scroll/shift when modal opens
+html.cdk-global-scrollblock {
+  position: static !important;
+  overflow: hidden !important;
+}
+
+// Ensure overlay is above the fixed sidebar
+.cdk-overlay-container {
+  z-index: 9999 !important;
+}

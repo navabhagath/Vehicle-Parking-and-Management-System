@@ -1,0 +1,27 @@
+<div class="customer-wrapper d-flex flex-column min-vh-100">
+
+  <header class="d-flex justify-content-between align-items-center px-3 pt-3 pb-2">
+    <app-location-dropdown (locationChange)="onLocationChange($event)"></app-location-dropdown>
+    <img
+      [src]="profileImg"
+      alt="Profile"
+      class="profile-avatar rounded-circle cursor-pointer"
+      width="44"
+      height="44"
+      (click)="openProfile()"
+    />
+  </header>
+
+  <div class="dashed-divider mx-3"></div>
+
+  <main class="flex-grow-1 d-flex flex-column mx-1 justify-content-start px-3">
+    <router-outlet></router-outlet>
+  </main>
+
+  <div class="dashed-divider mx-3"></div>
+
+  <footer class="bottom-section px-3 pb-3"></footer>
+
+</div>
+
+<app-profile-offcanvas #profileOffcanvas></app-profile-offcanvas>

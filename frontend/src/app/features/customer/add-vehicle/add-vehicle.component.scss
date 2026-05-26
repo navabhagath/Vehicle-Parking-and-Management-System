@@ -1,0 +1,137 @@
+// src/app/customer/add-vehicle/add-vehicle.component.scss
+
+// ── Backdrop ──
+.sheet-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 1040;
+  animation: fadeIn 0.25s ease;
+}
+
+// ── Sheet Container ──
+.sheet-container {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1050;
+  background: var(--bs-white);
+  border-top-left-radius: 24px;
+  border-top-right-radius: 24px;
+  max-height: 85vh;
+  overflow-y: auto;
+  animation: slideUp 0.3s ease;
+}
+
+// ── Drag Handle ──
+.drag-handle {
+  width: 40px;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--bs-grey-stroke);
+}
+
+// ── Field Label ──
+.field-label {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--bs-black);
+}
+
+// ── Input Field ──
+.input-field {
+  background: var(--bs-input);
+  border: none;
+  border-radius: 12px;
+  padding: 12px 14px;
+  font-size: 0.9rem;
+  color: var(--bs-black);
+
+  &:focus {
+    background: var(--bs-input);
+    box-shadow: 0 0 0 2px rgba(75, 210, 248, 0.3);
+  }
+
+  &::placeholder {
+    color: var(--bs-grey-stroke);
+  }
+}
+
+// ── Upload Preview ──
+.upload-preview {
+  width: 140px;
+  height: 90px;
+  border-radius: 14px;
+  background: var(--bs-input);
+  overflow: hidden;
+
+  .file-name {
+    font-size: 0.7rem;
+    color: var(--bs-black);
+    max-width: 120px;
+  }
+}
+
+// ── Upload Button ──
+.upload-btn {
+  width: 70px;
+  height: 90px;
+  cursor: pointer;
+  color: var(--bs-black);
+  transition: opacity 0.2s;
+
+  &:hover {
+    opacity: 0.7;
+  }
+
+  .upload-label {
+    font-size: 0.75rem;
+    font-weight: 500;
+  }
+}
+
+// ── Submit Button ──
+.submit-btn {
+  border-radius: 14px;
+  padding: 12px;
+  font-size: 0.95rem;
+  color: var(--bs-black);
+  background: var(--bs-yellow);
+  border: none;
+
+  &:hover:not(:disabled) {
+    background: var(--bs-yellow);
+    opacity: 0.9;
+  }
+
+  &:disabled {
+    background: var(--bs-yellow);
+    opacity: 0.5;
+  }
+}
+
+.dashed{
+  border: 1px dashed #4BD2F8 ;
+}
+
+.btn-check:checked + .type{
+  background-color: #4BD2F8;
+}
+
+.type{
+  width: 98px;
+  height: 67px;
+}
+
+
+// ── Animations ──
+@keyframes slideUp {
+  from { transform: translateY(100%); }
+  to   { transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}

@@ -1,0 +1,32 @@
+<div class="overlay" *ngIf="visible" [@fadeInOut]>
+  <div class="status-card" *ngIf="status === 'loading'">
+    <div class="spinner-ring"></div>
+    <p class="status-text mt-4">Processing...</p>
+    <p class="status-subtext">Please wait while we add money to your wallet</p>
+  </div>
+  <div class="status-card" *ngIf="status === 'success'" [@zoomIn]>
+    <button class="close-btn" (click)="onDismiss()">&#x2715;</button>
+    <div class="icon-circle success-circle">
+      <svg class="checkmark" viewBox="0 0 52 52">
+        <path class="checkmark-check" fill="none" d="M14 27l7.8 7.8L38 17" />
+      </svg>
+    </div>
+    <p class="status-text success-text mt-4">Payment Successful!</p>
+    <p class="status-subtext">Transaction of ₹{{ amount | number:'1.2-2' }} completed</p>
+    <p class="balance-text">New Balance: ₹{{ newBalance | number:'1.2-2' }}</p>
+  </div>
+  <div class="status-card" *ngIf="status === 'error'" [@zoomIn]>
+    <button class="close-btn" (click)="onDismiss()">&#x2715;</button>
+    <div class="icon-circle error-circle">
+      <svg class="crossmark" viewBox="0 0 52 52">
+        <path class="crossmark-line" fill="none" d="M16 16 36 36" />
+        <path class="crossmark-line" fill="none" d="M36 16 16 36" />
+      </svg>
+    </div>
+    <p class="status-text error-text mt-4">Transaction Failed</p>
+    <p class="status-subtext">{{ errorMessage }}</p>
+    <button class="retry-btn mt-3" (click)="onRetry()">Try Again</button>
+  </div>
+ 
+</div>
+ 

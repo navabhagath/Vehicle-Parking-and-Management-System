@@ -1,0 +1,62 @@
+<!-- my-tickets.component.html -->
+<div class="my-tickets-wrapper">
+ 
+  <!-- Header -->
+  <div class="tickets-header d-flex align-items-center justify-content-center position-relative py-3">
+    <button class="btn back-btn position-absolute start-0 ms-3" (click)="goBack()">
+      <i class="bi bi-arrow-left"></i>
+    </button>
+    <h5 class="fw-bold mb-0">Help Center</h5>
+  </div>
+ 
+  <!-- Section Title -->
+  <div class="text-center pt-3 pb-2">
+    <h6 class="fw-bold mb-0">My Tickets</h6>
+  </div>
+ 
+  <!-- Ticket Cards -->
+  <div class="tickets-list px-3 px-sm-4 pt-2 pb-5">
+ 
+    <!-- Empty State -->
+    <div *ngIf="tickets.length === 0" class="text-center text-muted py-5">
+      <i class="bi bi-ticket-perforated fs-1 d-block mb-2"></i>
+      <p class="mb-0">No tickets found</p>
+    </div>
+ 
+    <!-- Ticket Card -->
+    <div
+      *ngFor="let ticket of tickets"
+      class="ticket-card d-flex align-items-center justify-content-between mb-3 px-3 py-3"
+    >
+      <!-- Left: Info -->
+      <div class="ticket-info flex-grow-1 me-3">
+        <p class="ticket-subject fw-semibold mb-1">{{ ticket.subject }}</p>
+        <div class="d-flex align-items-center gap-1 mb-1">
+          <i class="bi bi-envelope-fill ticket-email-icon"></i>
+          <span class="ticket-email">{{ ticket.emailId || 'No email' }}</span>
+        </div>
+        <span class="ticket-date">{{ ticket.createdAt | date:'MMM d, yyyy HH:mm' }}</span>
+      </div>
+ 
+      <!-- Right: Status + Arrow -->
+      <div class="d-flex align-items-center gap-2">
+ 
+        <!-- Status Dropdown -->
+        <div class="dropdown">
+          <div
+            class="status-badge"
+            [ngClass]="getStatusClass(ticket.status)"
+          >
+            {{ formatStatus(ticket.status) }}
+        </div>
+        </div>
+ 
+      </div>
+    </div>
+ 
+  </div>
+ 
+
+ 
+</div>
+ 

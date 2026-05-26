@@ -1,0 +1,6 @@
+/* All layout handled by Bootstrap utilities in the template */
+
+/* Override ApexCharts default margin for compact fit */
+:host ::ng-deep .apexcharts-canvas {
+  margin: 0 auto;
+}

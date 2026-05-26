@@ -1,0 +1,76 @@
+<div class="my-5">
+  <p class="text-left">My Vehicles</p>
+  <div class="container position-relative">
+    <div
+      id="vehicleCarousel"
+      class="carousel slide"
+      data-bs-touch="true"
+      data-bs-interval="false"
+    >
+      <div class="carousel-inner">
+        <div
+          class="carousel-item"
+          *ngFor="let v of vehicles; let i = index"
+          [ngClass]="{ active: i == 0 }"
+        >
+          <div class="vehicle-card">
+            <img
+              [src]="
+                v.type === '2-WHEELER' ? 'assets/bike.png' : 'assets/car.png'
+              "
+              [alt]="v.type"
+              class="vehicle-bg-img"
+            />
+            <div class="card-header-row">
+              <div>
+                <div class="vehicle-name">{{ v.model }} / {{ v.name }}</div>
+                <div class="vehicle-details">{{ v.plateNumber }}</div>
+                <div class="vehicle-details">{{ v.type }}</div>
+              </div>
+              <div class="primary-toggle">
+                <span class="fst-italic">Primary</span>
+                <label class="toggle-switch">
+                  <input
+                    type="checkbox"
+                    [checked]="v.isPrimary"
+                    (change)="updatePrimary(v)"
+                  />
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+ 
+      <button
+        class="carousel-control-prev"
+        type="button"
+        data-bs-target="#vehicleCarousel"
+        data-bs-slide="prev"
+      >
+        <span class="carousel-control-prev-icon"></span>
+      </button>
+      <button
+        class="carousel-control-next"
+        type="button"
+        data-bs-target="#vehicleCarousel"
+        data-bs-slide="next"
+      >
+        <span class="carousel-control-next-icon"></span>
+      </button>
+    </div>
+  </div>
+ 
+  <div class="text-center mt-4">
+    <button
+      class="btn btn-yellow text-black btn-add-vehicle"
+      (click)="addVehicle()"
+    >
+      Add Vehicle
+    </button>
+  </div>
+</div>
+ 
+ 
+ 

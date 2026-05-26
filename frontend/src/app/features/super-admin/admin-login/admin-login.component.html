@@ -1,0 +1,141 @@
+<!-- <div class="container-fluid vh-100">
+  <div class="row h-100">
+    <div class="col-md-6 d-flex justify-content-center align-items-center">
+      <div class="col-10 col-sm-8 col-md-10 col-lg-8 col-xl-6">
+ 
+        <h2 class="fw-bold mb-4">Super Admin</h2>
+ 
+        <form [formGroup]="loginForm" (ngSubmit)="login()">
+         
+          <div class="mb-3">
+            <label class="form-label fw-medium">Email</label>
+            <input type="email"
+                   class="form-control"
+                   placeholder="Enter your email"
+                   formControlName="email"
+                   [class.is-invalid]="loginForm.get('email')?.touched && loginForm.get('email')?.invalid">
+            <div style="min-height: 1.2rem;" class="mt-1">
+    <small class="text-danger" *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.errors?.['required']">
+      Email is required.
+    </small>
+    <small class="text-danger" *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.errors?.['email']">
+      Please enter a valid email address.
+    </small>
+  </div>
+          </div>
+ 
+          <div class="mb-2">
+            <label class="form-label fw-medium">Password</label>
+            <input type="password"
+                   class="form-control"
+                   placeholder="Enter your password"
+                   formControlName="password"
+                   [class.is-invalid]="loginForm.get('password')?.touched && loginForm.get('password')?.invalid">
+            <div style="min-height: 1.2rem;" class="mt-1">
+    <small class="text-danger" *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.errors?.['required']">
+      Password is required.
+    </small>
+    <small class="text-danger" *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.errors?.['minlength']">
+      Password must be at least 6 characters.
+    </small>
+  </div>
+          </div>
+ 
+          <div style="min-height: 1.2rem;" class="mb-3">
+  <div *ngIf="errorMessage" class="text-danger small">
+    {{ errorMessage }}
+  </div>
+</div>
+ 
+          <div class="text-end mb-4">
+            <a href="#" class="text-decoration-none link-underline link-underline-hover small" routerLink="/super_admin/reset-password">Forgot Password?</a>
+          </div>
+ 
+          <button type="submit"
+                  class="btn btn-yellow w-100 fw-bold shadow-sm"
+                  [disabled]="loginForm.invalid || isLoading">
+            <span *ngIf="isLoading">Logging in...</span>
+            <span *ngIf="!isLoading">Login</span>
+          </button>
+        </form>
+ 
+      </div>
+    </div>
+  </div>
+</div> -->
+
+
+<div class="container-fluid vh-100">
+  <!-- Use 'justify-content-center' on the row to center horizontally -->
+  <!-- Use 'align-items-center' on the row to center vertically -->
+  <div class="row h-100 justify-content-center align-items-center">
+    
+    <!-- Responsive column: takes up 10 units on mobile, 4 on large screens -->
+    <div class="col-11 col-sm-8 col-md-6 col-lg-4">
+      
+      <div class="card border-0 shadow-lg p-4"> <!-- Added a card wrapper for better UI -->
+        <h2 class="fw-bold mb-4 text-center">Super Admin</h2>
+
+        <form [formGroup]="loginForm" (ngSubmit)="login()">
+          
+          <!-- Email Field -->
+          <div class="mb-3">
+            <label class="form-label fw-medium">Email</label>
+            <input type="email"
+                   class="form-control"
+                   placeholder="Enter your email"
+                   formControlName="email"
+                   [class.is-invalid]="loginForm.get('email')?.touched && loginForm.get('email')?.invalid">
+            <div style="min-height: 1.2rem;" class="mt-1">
+              <small class="text-danger" *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.errors?.['required']">
+                Email is required.
+              </small>
+              <small class="text-danger" *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.errors?.['email']">
+                Please enter a valid email address.
+              </small>
+            </div>
+          </div>
+
+          <!-- Password Field -->
+          <div class="mb-2">
+            <label class="form-label fw-medium">Password</label>
+            <input type="password"
+                   class="form-control"
+                   placeholder="Enter your password"
+                   formControlName="password"
+                   [class.is-invalid]="loginForm.get('password')?.touched && loginForm.get('password')?.invalid">
+            <div style="min-height: 1.2rem;" class="mt-1">
+              <small class="text-danger" *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.errors?.['required']">
+                Password is required.
+              </small>
+              <small class="text-danger" *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.errors?.['minlength']">
+                Password must be at least 6 characters.
+              </small>
+            </div>
+          </div>
+
+          <!-- Error Message Space -->
+          <div style="min-height: 1.2rem;" class="mb-3">
+            <div *ngIf="errorMessage" class="text-danger small">
+              {{ errorMessage }}
+            </div>
+          </div>
+
+          <!-- Forgot Password -->
+          <div class="text-end mb-4">
+            <a href="#" class="text-decoration-none small" routerLink="/super_admin/reset-password">Forgot Password?</a>
+          </div>
+
+          <!-- Submit Button -->
+          <button type="submit"
+                  class="btn btn-yellow w-100 fw-bold shadow-sm"
+                  [disabled]="loginForm.invalid || isLoading">
+            <span *ngIf="isLoading">Logging in...</span>
+            <span *ngIf="!isLoading">Login</span>
+          </button>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</div>

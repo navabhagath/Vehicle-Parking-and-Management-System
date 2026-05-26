@@ -1,0 +1,7 @@
+{
+  "all": true,
+  "include": ["controllers/**", "middlewares/**", "services/**", "utils/**"],
+  "exclude": ["test/**", "config/**", "node_modules/**"],
+  "reporter": ["text", "html"],
+  "check-coverage": false
+}

@@ -1,0 +1,182 @@
+<div class="raise-ticket-wrapper">
+ 
+  <!-- Header -->
+  <div class="ticket-header d-flex align-items-center justify-content-center position-relative py-3">
+    <button class="btn back-btn position-absolute start-0 ms-3" (click)="goBack()">
+      <i class="bi bi-arrow-left"></i>
+    </button>
+    <h5 class="fw-bold mb-0">Raise Ticket</h5>
+  </div>
+ 
+  <!-- Form -->
+  <form class="ticket-form px-3 px-sm-4 pt-4 pb-5" (ngSubmit)="onSubmit()" #ticketForm="ngForm" *ngIf="bookings.length>0 else Nobookings">
+ 
+    <!-- Subject -->
+    <div class="mb-4">
+      <label class="form-label fw-semibold">Subject</label>
+      <input
+        type="text"
+        class="form-control ticket-input"
+        [class.is-invalid]="subjectField.invalid && subjectField.touched"
+        placeholder="Enter subject"
+        [(ngModel)]="ticket.subject"
+        name="subject"
+        #subjectField="ngModel"
+        required
+        maxlength="15"
+      />
+      <div class="invalid-feedback" *ngIf="subjectField.invalid && subjectField.touched">
+        Subject is required.
+      </div>
+    </div>
+ 
+    <!-- Issue -->
+    <div class="mb-4">
+      <label class="form-label fw-semibold">Issue</label>
+      <textarea
+        class="form-control ticket-input"
+        [class.is-invalid]="issueField.invalid && issueField.touched"
+        rows="3"
+        placeholder="Describe your issue"
+        [(ngModel)]="ticket.issue"
+        name="issue"
+        #issueField="ngModel"
+        required
+      ></textarea>
+      <div class="invalid-feedback" *ngIf="issueField.invalid && issueField.touched">
+        Issue description is required.
+      </div>
+    </div>
+ 
+    <!-- Email -->
+    <div class="mb-4">
+      <label class="form-label fw-semibold">Email</label>
+      <input
+        type="email"
+        class="form-control ticket-input"
+        [class.is-invalid]="emailField.invalid && emailField.touched"
+        placeholder="Enter email"
+        [(ngModel)]="ticket.email"
+        name="email"
+        #emailField="ngModel"
+        required
+        email
+      />
+      <div class="invalid-feedback" *ngIf="emailField.invalid && emailField.touched">
+        <span *ngIf="emailField.errors?.['required']">Email is required.</span>
+        <span *ngIf="emailField.errors?.['email']">Please enter a valid email.</span>
+      </div>
+    </div>
+ 
+    <!-- Category Dropdown -->
+    <div class="mb-4">
+      <label class="form-label fw-semibold">Category</label>
+      <input type="hidden" [(ngModel)]="ticket.category" name="category" #categoryField="ngModel" required />
+      <div class="dropdown w-100">
+        <button
+          type="button"
+          class="form-control ticket-input dropdown-toggle text-start d-flex align-items-center justify-content-between"
+          [class.is-invalid]="categoryField.invalid && submitted"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
+        >
+          <span [class.text-muted]="!ticket.category">
+            {{ ticket.category ? getCategoryLabel(ticket.category) : 'Select Category' }}
+          </span>
+        </button>
+ 
+        <ul class="dropdown-menu category-dropdown w-100 shadow-premium p-0">
+          <li
+            *ngFor="let cat of categories"
+            class="category-item px-3 py-2"
+            [class.active]="ticket.category === cat.value"
+            (click)="ticket.category = cat.value"
+          >
+            {{ cat.label }}
+          </li>
+        </ul>
+      </div>
+      <div class="text-danger small mt-1" *ngIf="categoryField.invalid && submitted">
+        Category is required.
+      </div>
+    </div>
+ 
+    <!-- Booking ID Dropdown -->
+    <div class="mb-4">
+      <label class="form-label fw-semibold">Booking ID</label>
+      <input type="hidden" [(ngModel)]="ticket.bookingId" name="bookingId" #bookingField="ngModel" required />
+      <div class="dropdown w-100">
+        <button
+          type="button"
+          class="form-control ticket-input dropdown-toggle text-start d-flex align-items-center justify-content-between"
+          [class.is-invalid]="bookingField.invalid && submitted"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
+        >
+          <span [class.text-muted]="!ticket.bookingId">
+            {{ ticket.bookingId ? getSelectedBookingLabel() : 'Select Booking' }}
+          </span>
+        </button>
+ 
+        <ul class="dropdown-menu booking-dropdown w-100 shadow-premium p-0">
+          <li
+            *ngFor="let booking of bookings"
+            class="dropdown-item-wrapper"
+            (click)="selectBooking(booking)"
+          >
+            <div
+              class="booking-option px-3 py-3"
+              [class.active]="ticket.bookingId === booking.id"
+            >
+              <div class="d-flex justify-content-between align-items-start mb-1">
+                <span class="fw-semibold booking-vehicle">{{ booking.vehicleName }}</span>
+                <span class="badge bg-green text-white rounded-pill">{{ booking.finalAmount | currency:'INR':'symbol':'1.0-0' }}</span>
+              </div>
+              <div class="booking-details">
+                <div class="d-flex align-items-center gap-1 mb-1">
+                  <i class="bi bi-geo-alt-fill text-green"></i>
+                  <span>{{ booking.location }}</span>
+                </div>
+                <div class="d-flex flex-column flex-sm-row gap-1 gap-sm-3">
+                  <span class="booking-date">
+                    <i class="bi bi-box-arrow-in-right text-green"></i>
+                    {{ booking.checkIn | date:'dd MMM yyyy, hh:mm a' }}
+                  </span>
+                  <span class="booking-date">
+                    <i class="bi bi-box-arrow-right text-red"></i>
+                    {{ booking.checkOut | date:'dd MMM yyyy, hh:mm a' }}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </li>
+ 
+          <li *ngIf="bookings.length === 0" class="text-center text-muted py-3">
+            No bookings found
+          </li>
+        </ul>
+      </div>
+      <div class="text-danger small mt-1" *ngIf="bookingField.invalid && submitted">
+        Booking ID is required.
+      </div>
+    </div>
+ 
+    <!-- Submit Button -->
+    <div class="pt-2 d-flex justify-content-center">
+      <button type="submit" class="btn btn-green text-white fw-semibold submit-btn w-100">
+        Submit Ticket
+      </button>
+    </div>
+ 
+  </form>
+ 
+  <ng-template #Nobookings>
+    <div class="d-flex flex-column align-items-center justify-content-center text-center py-5 px-3">
+      <i class="bi bi-calendar-x" style="font-size: 3rem; color: #adb5bd;"></i>
+      <h5 class="fw-semibold mt-3 mb-2">No Bookings Found</h5>
+      <p class="text-muted mb-0">
+        You don't have any bookings to raise a ticket for.
+      </p>
+    </div>
+  </ng-template>
+</div>

@@ -1,0 +1,84 @@
+ 
+<div class="container-fluid p-0">
+  <div class="row g-0">
+    <div class="col-md-2 p-0">
+      <app-sidebar></app-sidebar>
+    </div>
+ 
+    <div class="col-md-10 bg-light min-vh-100">
+      <div class="container-fluid py-4 px-4">
+       
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <div>
+            <h2 class="h3 fw-bold mb-0 text-dark">Revenue Management</h2>
+            <p class="text-muted small">Monitor vendor renewal cycles and platform health</p>
+          </div>
+         
+          <div class="input-group shadow-sm w-25">
+            <span class="input-group-text bg-white border-end-0">
+              <i class="bi bi-search text-muted"></i>
+            </span>
+            <input type="text" class="form-control border-start-0 ps-0"
+                   placeholder="Search vendors..." (input)="onSearch($event)" />
+          </div>
+        </div>
+ 
+        <hr class="mb-4 opacity-10">
+ 
+        <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+          <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+              <thead class="bg-white">
+                <tr>
+                  <th class="ps-4 py-3 text-muted small fw-bold text-uppercase">Vendor Details</th>
+                  <th class="py-3 text-muted small fw-bold text-uppercase">Next Renewal</th>
+                  <th class="py-3 text-muted small fw-bold text-uppercase">Status</th>
+                  <th class="py-3 text-muted small fw-bold text-uppercase text-end pe-4">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of filteredList">
+                  <td class="ps-4">
+                    <div class="fw-bold text-dark">{{ item.vendorName }}</div>
+                    <div class="text-muted x-small" style="font-size: 0.75rem;">
+                      <i class="bi bi-envelope me-1"></i>{{ item.vendorEmail || 'No Email' }}
+                    </div>
+                  </td>
+ 
+                  <td>
+                    <div class="d-flex align-items-center">
+                      <i class="bi bi-calendar-check text-primary me-2"></i>
+                      <span class="fw-medium">{{ item.expiryDate | date:'mediumDate' }}</span>
+                    </div>
+                  </td>
+ 
+                  <td>
+                    <span class="badge rounded-pill px-3 py-2 border shadow-sm"
+                          [ngClass]="getStatusClass(item.status)">
+                      {{ item.status }}
+                    </span>
+                  </td>
+ 
+                  <td class="text-end pe-4">
+  <!-- Case 1: Status is Active -->
+  <div *ngIf="item.status === 'Active'" class="text-success small fw-medium">
+    <i class="bi bi-check-circle-fill me-1"></i> Up to date
+  </div>
+ 
+  <!-- Case 2: Status is Expiring Soon or Overdue -->
+  <div *ngIf="item.status === 'Expiring Soon' || item.status === 'Overdue'">
+    <button
+      class="btn btn-sm btn-outline-primary rounded-pill px-3 shadow-sm"
+      (click)="sendReminder(item)">
+      <i class="bi bi-send me-1"></i> Send Reminder
+    </button>
+   
+    <!-- Show Last Sent timestamp if it exists -->
+    <div *ngIf="item.lastReminderSentAt" class="text-muted mt-1" style="font-size: 0.7rem;">
+      <i class="bi bi-clock-history me-1"></i>
+      Last sent: {{ item.lastReminderSentAt | date:'short' }}
+    </div>
+  </div>
+</td>
+ 
+ 

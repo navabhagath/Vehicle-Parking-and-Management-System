@@ -1,0 +1,42 @@
+{
+  "name": "project-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "cross-env NODE_ENV=test mocha --recursive --timeout 10000 --exit \"test/**/*.test.js\"",
+    "coverage": "cross-env NODE_ENV=test nyc mocha --recursive --timeout 10000 --exit \"test/**/*.test.js\"",
+    "dev": "cross-env NODE_OPTIONS=--use-system-ca nodemon server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "express-validator": "^7.3.2",
+    "helmet": "^8.1.0",
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^9.5.0",
+    "morgan": "^1.10.1",
+    "multer": "^2.1.1",
+    "nodemailer": "^8.0.7",
+    "otp-generator": "^4.0.1",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1",
+    "twilio": "^6.0.2"
+  },
+  "devDependencies": {
+    "chai": "^5.1.1",
+    "cross-env": "^10.1.0",
+    "esmock": "^2.6.4",
+    "mocha": "^10.8.2",
+    "nodemon": "^3.1.14",
+    "nyc": "^17.1.0",
+    "sinon": "^17.0.1"
+  }
+}

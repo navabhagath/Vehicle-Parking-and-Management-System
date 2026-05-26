@@ -1,0 +1,61 @@
+<div
+  class="d-flex justify-content-center align-items-center vh-100 bg-light px-3"
+>
+  <div
+    class="d-flex flex-column align-items-center w-100"
+    style="max-width: 400px"
+  >
+    <h2 class="fw-bold text-dark text-center mb-2">
+      Welcome to Smart Parking!
+    </h2>
+    <p class="text-secondary text-center mb-4">What should we call you?</p>
+
+    <div class="w-100 mb-3">
+      <input
+        type="text"
+        class="form-control form-control-lg rounded-3 text-center"
+        placeholder="Enter your name"
+        [formControl]="nameControl"
+        [class.is-invalid]="nameControl.touched && nameControl.invalid"
+        maxlength="30"
+      />
+      <div style="min-height: 1.5rem" class="mt-1 text-center">
+        <small
+          class="text-danger"
+          *ngIf="nameControl.touched && nameControl.hasError('required')"
+        >
+          Please enter your name.
+        </small>
+        <small
+          class="text-danger"
+          *ngIf="nameControl.touched && nameControl.hasError('minlength')"
+        >
+          Name must be at least 4 characters.
+        </small>
+        <small
+          class="text-danger"
+          *ngIf="nameControl.touched && nameControl.hasError('pattern') && !(nameControl.touched && nameControl.hasError('minlength'))"
+        >
+          Name must start with a letter and contain no special characters.
+        </small>
+      </div>
+    </div>
+
+    <div style="min-height: 1.5rem" class="mb-3">
+      <small class="text-danger" *ngIf="errorMessage">
+        {{ errorMessage }}
+      </small>
+    </div>
+
+    <button
+      class="btn btn-yellow w-100 fw-semibold py-3 rounded-3 fs-6 border-2"
+      [disabled]="nameControl.invalid || isLoading"
+      (click)="onSubmit()"
+    >
+      <span *ngIf="!isLoading">Continue</span>
+      <span *ngIf="isLoading">
+        <span class="spinner-border spinner-border-sm me-2"></span>Saving...
+      </span>
+    </button>
+  </div>
+</div>

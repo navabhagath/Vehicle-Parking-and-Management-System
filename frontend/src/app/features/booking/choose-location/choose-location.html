@@ -1,0 +1,106 @@
+<div class="choose-location-wrapper">
+  <div class="section-header">
+    <button class="btn-back" (click)="goBack()">
+      <i class="bi bi-arrow-left"></i>
+    </button>
+    <div>
+      <h2 class="section-title">Book your <span class="highlight">Spot</span></h2>
+    </div>
+  </div>
+
+  <div class="search-bar">
+    <i class="bi bi-search search-icon"></i>
+    <input
+      type="text"
+      class="form-control search-input"
+      placeholder="Enter Parking Location"
+      [(ngModel)]="searchQuery"
+      (input)="onSearch()"
+    />
+  </div>
+
+  <div class="location-list">
+    @for (loc of filteredLocations; track loc.id) {
+      <div
+        class="location-card"
+        [class.selected]="isSelected(loc)"
+        [class.disabled]="!getAvailability(loc)"
+        (click)="selectLocation(loc)"
+      >
+        <div class="card-top-row">
+          <div class="card-name-block">
+            <i class="bi bi-geo-alt-fill location-icon"></i>
+            <span class="location-name">{{ loc.locationName }}</span>
+            <button
+              type="button"
+              class="directions-icon"
+              (click)="openMapModal(loc, $event)"
+              aria-label="View on map"
+            >
+              <i class="bi bi-sign-turn-right"></i>
+            </button>
+          </div>
+
+          <span
+            class="badge-availability"
+            [class.available]="getAvailability(loc)"
+            [class.full]="!getAvailability(loc)"
+          >
+            {{ getAvailability(loc) ? 'Available' : 'Full' }}
+          </span>
+        </div>
+
+        <div class="card-details">
+          <div class="detail-item">
+            <i class="bi bi-clock"></i>
+            <span>{{ loc.operationalHours.start }} – {{ loc.operationalHours.end }}</span>
+          </div>
+
+          <div class="detail-item price-tag">
+            <i class="bi bi-currency-rupee"></i>
+            <span>{{ getPrice(loc) }}/hr</span>
+          </div>
+        </div>
+
+        <div class="amenities-row">
+          @for (amenity of loc.amenities; track amenity) {
+            <span class="amenity-pill">{{ amenity }}</span>
+          }
+        </div>
+      </div>
+    } @empty {
+      <div class="empty-state">
+        <i class="bi bi-inbox"></i>
+        <p>No locations found matching your search.</p>
+      </div>
+    }
+  </div>
+
+  <div class="confirm-wrapper">
+    <button class="confirm-btn" (click)="confirmLocation()" [disabled]="!selectedLocation">
+      Select
+    </button>
+  </div>
+
+  @if (mapModalLocation) {
+    <div class="map-modal-overlay" (click)="closeMapModal()">
+      <div class="map-modal" (click)="$event.stopPropagation()">
+        <div class="map-modal-header">
+          <h3>{{ mapModalLocation.locationName }}</h3>
+          <button class="btn-close-modal" (click)="closeMapModal()" aria-label="Close">
+            <i class="bi bi-x-lg"></i>
+          </button>
+        </div>
+        <div class="map-modal-body">
+          <iframe
+            [src]="mapIframeUrl"
+            width="100%"
+            height="350"
+            allowfullscreen
+            loading="lazy"
+          ></iframe>
+        </div>
+      </div>
+    </div>
+  }
+</div>

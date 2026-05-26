@@ -1,0 +1,79 @@
+<div *ngIf="isLoading" class="text-center py-5">
+  <div class="spinner-border text-primary"></div>
+</div>
+
+<div *ngIf="hasError" class="text-center py-5">
+  <i class="bi bi-exclamation-triangle fs-1 text-danger"></i>
+  <p class="text-muted mt-2 mb-3">Something went wrong. Please try again.</p>
+</div>
+
+<div *ngIf="!isLoading && !hasError" class="p-3">
+
+  <!-- Location Banner -->
+  <div class="text-black rounded p-3 mb-3"
+    style="background: #FFDF66 ;">
+    <small >Viewing bookings for</small>
+    <h5 class="fw-bold mb-0">{{ locationName }}</h5>
+  </div>
+
+  <!-- Counts -->
+
+  <div class="border rounded shadow-sm g-2 mb-3">
+    <div class="grid">
+      <div *ngFor="let tab of arr" class="border rounded d-flex flex-column align-items-center justify-content-center p-2  m-2" >
+        @if(tab === 'Current'){
+          <h5 class="fw-bold text-light-blue mb-0">{{ currentBookings.length }}</h5>
+        } @else {
+          <h5 class="fw-bold text-red mb-0">{{ overstayedBookings.length }}</h5>
+        }
+        <small class="text-muted">{{tab}}</small>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <ul class="nav nav-tabs mb-3 flex-nowrap nav-fill">
+    <li class="nav-item">
+      <a class="nav-link" [class.active]="activeTab === 'Current'"
+        (click)="setTab('Current')" style="cursor:pointer;">Currently Parked</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" [class.active]="activeTab === 'Overstayed'"
+        (click)="setTab('Overstayed')" style="cursor:pointer;">Overstayed</a>
+    </li>
+  </ul>
+
+  <!-- Empty -->
+  <div *ngIf="getTabBookings().length === 0" class="text-center text-muted py-4">
+    No {{ activeTab }} bookings found
+  </div>
+
+  <!-- Booking -->
+  <div *ngFor="let b of getTabBookings()" class="card mb-2">
+    <div class="card-body p-3">
+
+      <div class="d-flex justify-content-between align-items-center mb-2">
+        <div>
+          <strong>{{ b.plateNumber }}</strong>
+          <small class="text-muted d-block">{{ b.customerName }}</small>
+        </div>
+        <span class="badge" [class.bg-light-blue]="b.type === '4-WHEELER'"
+          [class.bg-black]="b.type === '2-WHEELER'">
+          {{ b.type === '2-WHEELER' ? 'Bike' : 'Car' }}
+        </span>
+      </div>
+
+      <!-- Current tab: show check-in time -->
+      <div *ngIf="activeTab === 'Current'" class="text-muted" style="font-size:13px;">
+        In: {{ b.actualCheckIn | date : 'hh:mm a' }}
+      </div>
+
+      <!-- Overstayed tab: show check-in and expected end -->
+      <div *ngIf="activeTab === 'Overstayed'" class="text-red" style="font-size:13px;">
+        In: {{ b.actualCheckIn | date : 'hh:mm a' }} | Should have left by: {{ b.scheduledEndTime | date : 'hh:mm a' }}
+      </div>
+
+    </div>
+  </div>
+
+</div>

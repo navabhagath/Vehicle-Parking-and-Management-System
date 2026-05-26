@@ -1,0 +1,84 @@
+<div class="wallet-container bg-white rounded-4 shadow-sm p-4">
+ 
+  <p class="fst-italic text-muted mb-1">Wallet Value</p>
+  <h2 class="fw-bold text-navy-black mb-3">
+    {{ walletBalance | currency:'INR':'symbol':'1.2-2' }}
+  </h2>
+ 
+  <!-- ─── Toggle (only when no @Input is passed, i.e. mode = 'both') ─── -->
+  <div *ngIf="showToggle" class="mode-toggle d-flex mb-4 rounded-pill overflow-hidden">
+    <button
+      class="toggle-btn flex-fill py-2 fw-semibold"
+      [class.active]="isAddMoneyMode"
+      (click)="setMode(true)">
+      Add Money
+    </button>
+    <button
+      class="toggle-btn flex-fill py-2 fw-semibold"
+      [class.active]="!isAddMoneyMode"
+      (click)="setMode(false)">
+      Withdraw
+    </button>
+  </div>
+ 
+  <!-- ─── Preset Amounts ─── -->
+  <div class="row g-3 mb-4">
+    <div class="col-6" *ngFor="let amount of presetAmounts">
+      <button
+        class="preset-btn w-100 py-3 rounded-3 fw-semibold fs-5"
+        [class.active]="selectedAmount === amount"
+        (click)="selectAmount(amount)">
+        {{ amount | currency:"INR" }}
+      </button>
+    </div>
+  </div>
+ 
+  <!-- ─── Custom Amount Input ─── -->
+  <div class="mb-3">
+    <div class="custom-input-wrapper d-flex align-items-center rounded-3 px-3">
+      <input
+        type="number"
+        class="form-control border-0 shadow-none fs-5 ps-2"
+        [placeholder]="showAddSection ? 'Enter custom amount' : 'Enter withdrawal amount'"
+        [(ngModel)]="customAmount"
+        (input)="onCustomInput()"
+        min="1"
+      />
+    </div>
+  </div>
+ 
+  <!-- ─── Withdrawal Validation Error ─── -->
+  <div *ngIf="withdrawalError" class="alert alert-danger py-2 px-3 rounded-3 mb-3">
+    <small>{{ withdrawalError }}</small>
+  </div>
+ 
+  <!-- ─── Add Money Button ─── -->
+  <button
+    *ngIf="showAddSection"
+    class="btn btn-yellow text-black fw-semibold rounded-pill w-100 py-3 fs-5"
+    [disabled]="!selectedAmount && !customAmount"
+    (click)="addMoney()">
+    Add Money
+  </button>
+ 
+  <!-- ─── Withdraw Button ─── -->
+  <button
+    *ngIf="showWithdrawSection"
+    class="btn btn-withdraw text-white fw-semibold rounded-pill w-100 py-3 fs-5"
+    [disabled]="!selectedAmount && !customAmount"
+    (click)="withdrawMoney()">
+    Withdraw Money
+  </button>
+ 
+</div>
+ 
+<!-- ─── Transaction Status Overlay ─── -->
+<app-transaction-status-overlay
+  [status]="txStatus"
+  [amount]="txAmount"
+  [newBalance]="txNewBalance"
+  [errorMessage]="txErrorMessage"
+  (dismissed)="txStatus = null"
+  (retry)="retryTransaction()"
+/>
+ 

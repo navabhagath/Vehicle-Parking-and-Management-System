@@ -1,0 +1,19 @@
+@import '../../../../src/styles.scss';
+
+// ::ng-deep overrides internal button styles of angular material
+::ng-deep {
+  .btn-red {
+    background-color: $red !important;
+    color: $white !important;
+  }
+
+  .btn-yellow {
+    background-color: $yellow !important;
+    color: $black !important;
+  }
+
+  .btn-default {
+    background-color: $green !important;
+    color: $white !important;
+  }
+}

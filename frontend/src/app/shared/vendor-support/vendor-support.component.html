@@ -1,0 +1,127 @@
+<!-- raise-ticket.component.html -->
+<div class="raise-ticket-wrapper">
+ 
+  <!-- Header -->
+  <div class="ticket-header d-flex align-items-center justify-content-center position-relative py-3">
+    <button class="btn back-btn position-absolute start-0 ms-3" (click)="goBack()">
+      <i class="bi bi-arrow-left"></i>
+    </button>
+    <h5 class="fw-bold mb-0">Raise Ticket</h5>
+  </div>
+ 
+  <!-- Form -->
+  <form
+    #ticketForm="ngForm"
+    class="ticket-form px-3 px-sm-4 pt-4 pb-5"
+    (ngSubmit)="onSubmit(ticketForm)"
+    novalidate
+  >
+ 
+    <!-- Subject -->
+    <div class="mb-4">
+      <label class="form-label fw-semibold">Subject</label>
+      <input
+        type="text"
+        class="form-control ticket-input"
+        [class.is-invalid]="subjectField.invalid && (subjectField.dirty || subjectField.touched || formSubmitted)"
+        placeholder="Enter subject"
+        [(ngModel)]="ticket.subject"
+        name="subject"
+        #subjectField="ngModel"
+        required
+        minlength="5"
+        maxlength="20"
+      />
+      <div class="invalid-feedback" *ngIf="subjectField.invalid && (subjectField.dirty || subjectField.touched || formSubmitted)">
+        <span *ngIf="subjectField.errors?.['required']">Subject is required.</span>
+        <span *ngIf="subjectField.errors?.['minlength']">Subject must be at least 5 characters.</span>
+        <span *ngIf="subjectField.errors?.['maxlength']">Subject cannot exceed 100 characters.</span>
+      </div>
+    </div>
+ 
+    <!-- Issue -->
+    <div class="mb-4">
+      <label class="form-label fw-semibold">Issue</label>
+      <textarea
+        class="form-control ticket-input"
+        [class.is-invalid]="issueField.invalid && (issueField.dirty || issueField.touched || formSubmitted)"
+        rows="3"
+        placeholder="Describe your issue"
+        [(ngModel)]="ticket.issue"
+        name="issue"
+        #issueField="ngModel"
+        required
+        minlength="10"
+        maxlength="100"
+      ></textarea>
+      <div class="invalid-feedback" *ngIf="issueField.invalid && (issueField.dirty || issueField.touched || formSubmitted)">
+        <span *ngIf="issueField.errors?.['required']">Issue description is required.</span>
+        <span *ngIf="issueField.errors?.['minlength']">Issue must be at least 10 characters.</span>
+        <span *ngIf="issueField.errors?.['maxlength']">Issue cannot exceed 500 characters.</span>
+      </div>
+    </div>
+ 
+    <!-- Email -->
+    <div class="mb-4">
+      <label class="form-label fw-semibold">Email</label>
+      <input
+        type="text"
+        class="form-control ticket-input"
+        [class.is-invalid]="emailField.invalid && (emailField.dirty || emailField.touched || formSubmitted)"
+        placeholder="Enter email"
+        [(ngModel)]="ticket.email"
+        name="email"
+        #emailField="ngModel"
+        required
+        pattern="^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$"
+      />
+      <div class="invalid-feedback" *ngIf="emailField.invalid && (emailField.dirty || emailField.touched || formSubmitted)">
+        <span *ngIf="emailField.errors?.['required']">Email is required.</span>
+        <span *ngIf="emailField.errors?.['pattern']">Please enter a valid email address.</span>
+      </div>
+    </div>
+ 
+    <!-- Category Dropdown -->
+    <div class="mb-4">
+      <label class="form-label fw-semibold">Category</label>
+      <div class="dropdown w-100">
+        <button
+          type="button"
+          class="form-control ticket-input dropdown-toggle text-start d-flex align-items-center justify-content-between"
+          [class.is-invalid]="formSubmitted && !ticket.category"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
+        >
+          <span [class.text-muted]="!ticket.category">
+            {{ ticket.category ? getCategoryLabel(ticket.category) : 'Select Category' }}
+          </span>
+        </button>
+ 
+        <ul class="dropdown-menu category-dropdown w-100 shadow-premium p-0">
+          <li
+            *ngFor="let cat of categories"
+            class="category-item px-3 py-2"
+            [class.active]="ticket.category === cat.value"
+            (click)="selectCategory(cat.value)"
+          >
+            {{ cat.label }}
+          </li>
+        </ul>
+      </div>
+      <div class="text-danger small mt-1" *ngIf="formSubmitted && !ticket.category">
+        Please select a category.
+      </div>
+    </div>
+ 
+    <!-- Submit Button -->
+    <div class="pt-2 d-flex justify-content-center">
+      <button
+        type="submit"
+        class="btn btn-green text-white fw-semibold submit-btn w-100"
+      >
+        Submit Ticket
+      </button>
+    </div>
+ 
+  </form>
+</div>

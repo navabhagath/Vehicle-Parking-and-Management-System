@@ -1,0 +1,29 @@
+
+ <nav class="col-md-2 d-none d-md-block bg-white border-end p-0 shadow-sm vh-100 position-fixed">
+  <div class="pt-3">
+    <h3 class="text-dark text-center py-4 border-bottom border-light fw-bold">Super Admin</h3>
+
+    <div class="d-grid gap-1 px-3 mt-4">
+      <button routerLink="/super_admin/dashboard" routerLinkActive="active-yellow" class="btn btn-sidebar text-dark text-start">
+        Dashboard
+      </button>
+      <button routerLink="/super_admin/vendor" routerLinkActive="active-yellow" class="btn btn-sidebar text-dark text-start">
+        Vendor
+      </button>
+      <button routerLink="/super_admin/revenue" routerLinkActive="active-yellow" class="btn btn-sidebar text-dark text-start">
+        Revenue
+      </button>
+      <button routerLink="/super_admin/tickets" routerLinkActive="active-yellow" class="btn btn-sidebar text-dark text-start">
+         Tickets
+      </button>
+      <button routerLink="/super_admin/rbac-panel" routerLinkActive="active-yellow" class="btn btn-sidebar text-dark text-start">
+        Access Control
+      </button>
+      
+      <button (click)="logout()" class="btn btn-sidebar text-danger mt-5 fw-bold text-start">
+        <i class="bi bi-box-arrow-left me-2"></i> Logout
+      </button>
+    </div>
+  </div>
+</nav>
+

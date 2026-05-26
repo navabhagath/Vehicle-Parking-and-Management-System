@@ -1,0 +1,67 @@
+@if (user) {
+  @if (!hasVehicles) {
+    <div class="no-vehicle-state d-flex flex-column align-items-center mt-5">
+      <button class="add-vehicle-btn d-flex flex-column align-items-center justify-content-center mb-3" (click)="openAddVehicle()">
+        <svg width="37" height="36" viewBox="0 0 28 28" fill="none">
+          <path d="M14 5V23" stroke="#2F2F2F" stroke-width="2.2" stroke-linecap="round"/>
+          <path d="M5 14H23" stroke="#2F2F2F" stroke-width="2.2" stroke-linecap="round"/>
+        </svg>
+        <span class="add-label mt-1">Add</span>
+      </button>
+      <p class="no-vehicle-text text-center">
+        Let's&nbsp; Start with<br/> adding your<br/> first vehicle
+      </p>
+    </div>
+  } @else {
+    <p class="vehicle-quote text-left my-4">
+      Hello&nbsp;{{user.name}} ,<br/>
+      Because your time is more valuable<br/>
+      than parking hunt
+    </p>
+ 
+    <div class="text-center mb-5">
+      @if (currentBooking) {
+        <div class="active-booking-card d-flex flex-column align-items-center p-4">
+          <p class="fw-semibold mb-2">Your Current Booking</p>
+          <qrcode [qrdata]="qrData" [width]="200" errorCorrectionLevel="M"></qrcode>
+          <p class="booking-id-label mt-2 fw-bold">{{ currentBooking.id }}</p>
+          <span class="badge rounded-pill mt-1"
+            [class.bg-warning]="currentBooking.status === 'CONFIRMED'"
+            [class.bg-success]="currentBooking.status === 'ACTIVE'">
+            {{ currentBooking.status }}
+          </span>
+        </div>
+      } @else {
+        @if(walletValue>0){
+        <button class="btn rounded-4 fw-semibold btn-yellow text-black btn-add-vehicle btn-lg" (click)="BookNow()">Book Now</button>
+        }
+        @else {
+          <div class=" container rounded-4 p-4  fw-semibold w-auto bg-yellow text-black">Your Wallet value is less than 0. Kindly Recharge before booking !</div>
+        }
+      }
+    </div>
+ 
+    <app-parking-location [selectedLocation]="selectedLocation"></app-parking-location>
+ 
+    <app-my-vehicles
+      [user]="user"
+      [vehicles]="vehicles"
+      (addVehicleRequest)="openAddVehicle()">
+    </app-my-vehicles>
+ 
+    <app-dashboard-wallet [user]="user"></app-dashboard-wallet>
+ 
+    <app-recent-bookings [user]="user"></app-recent-bookings>
+  }
+} @else {
+  <div class="text-center mt-5">Loading user profile...</div>
+}
+ 
+@if (showAddVehicle) {
+  <app-add-vehicle
+    (vehicleAdded)="onVehicleAdded($event)"
+    (closed)="onAddVehicleClosed()">
+  </app-add-vehicle>
+}
+ 
+ 

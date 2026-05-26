@@ -1,0 +1,28 @@
+<div class="border rounded-3 p-2 m-3 bg-white">
+    <div class="mb-2">
+      <h6 class="fw-bold mb-0" style="font-size:14px;">Revenue Overview</h6>
+    </div>
+  <div class="row g-2">
+    <div
+      class="col-6 col-lg-3"
+      *ngFor="let card of stats">
+      <div class="d-flex align-items-center gap-2 rounded-3 p-2" style="background:#f8f9fb;">
+        <div
+          class="d-flex align-items-center justify-content-center rounded-2 flex-shrink-0"
+          [style.background]="card.bg"
+          [style.color]="card.color"
+          style="width:32px; height:32px; font-size:14px;">
+          <i class="bi" [ngClass]="card.icon"></i>
+        </div>
+        <div>
+          <div class="text-muted text-uppercase fw-medium" style="font-size:10px; letter-spacing:0.5px;">
+            {{ card.label }}
+          </div>
+          <div class="fw-bold" style="font-size:16px; letter-spacing:-0.3px;">
+            {{ card.value | currency:'INR':'symbol':'1.0-0' }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

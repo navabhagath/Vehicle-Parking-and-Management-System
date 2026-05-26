@@ -1,0 +1,384 @@
+<!-- 
+ <div class="container-fluid">
+  <div class="row">
+
+    <div class="col-md-2 p-0">
+      <app-sidebar></app-sidebar>
+    </div>
+
+    <div class="col-md-10 p-0 bg-light min-vh-100">
+      <div class="container-fluid py-4 px-4">
+
+     
+        <div class="d-flex justify-content-between align-items-center pb-3 mb-4 border-bottom">
+          <div>
+            <div class="text-uppercase text-muted small fw-semibold mb-1" style="letter-spacing: 0.1em;">Management</div>
+            <h1 class="h3 fw-bold mb-1">Vendors</h1>
+            <p class="text-muted small mb-0">Overview of all registered parking partners</p>
+          </div>
+
+          <div class="d-flex align-items-center gap-3 justify-content-end">
+
+            <div class="input-group shadow-sm" style="width: 280px;">
+              <span class="input-group-text bg-white border-end-0">
+                <i class="bi bi-search text-muted"></i>
+              </span>
+              <input type="text" class="form-control border-start-0 ps-0"
+                     placeholder="Search vendors..." (input)="onSearch($event)" />
+            </div>
+
+        
+            <select class="form-select shadow-sm fw-semibold"
+                    style="width: auto; min-width: 150px;"
+                    [ngClass]="{
+                      'text-success border-success': selectedStatus === 'APPROVED',
+                      'text-danger border-danger': selectedStatus === 'REJECTED',
+                      'text-warning-emphasis border-warning': selectedStatus === 'PENDING' || selectedStatus === 'NA',
+                      'text-dark': selectedStatus === 'ALL' || !selectedStatus
+                    }"
+                    (change)="onFilterChange($event)">
+              <option value="ALL" class="text-dark fw-semibold">All Status</option>
+              <option value="APPROVED" class="text-success fw-semibold" > Approved</option>
+              <option value="PENDING" class="text-warning-emphasis fw-semibold"> Pending</option>
+              <option value="REJECTED" class="text-danger fw-semibold" >Rejected</option>
+              <option value="NA" class="text-warning-emphasis fw-semibold" > N/A</option>
+            </select>
+
+          </div>
+        </div>
+
+        <div class="d-flex align-items-center gap-2 mb-3">
+          <span class="badge bg-white text-dark border px-3 py-2 fw-normal">
+            <i class="bi bi-people-fill me-1 text-primary"></i>
+            Total: <span class="fw-bold ms-1">{{ displayVendors.length }}</span>
+          </span>
+        </div>
+
+        <div class="card shadow-sm border-0 rounded-3 overflow-hidden">
+          <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+              <thead style="background-color: #f8f9fa;">
+                <tr>
+                  <th class="p-3 text-uppercase small fw-semibold text-muted" style="letter-spacing: 0.05em;">Name</th>
+                
+                  <th class="p-3 text-uppercase small fw-semibold text-muted" style="letter-spacing: 0.05em;">Email</th>
+                  <th class="p-3 text-uppercase small fw-semibold text-muted" style="letter-spacing: 0.05em;">Phone</th>
+                  <th class="p-3 text-uppercase small fw-semibold text-muted" style="letter-spacing: 0.05em;">Status</th>
+                  <th class="p-3 text-uppercase small fw-semibold text-muted text-center" style="letter-spacing: 0.05em;">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+
+                <tr *ngIf="isLoading">
+                  <td colspan="6" class="text-center py-5">
+                    <div class="spinner-border text-primary" role="status"></div>
+                    <p class="mt-2 text-muted mb-0">Loading data...</p>
+                  </td>
+                </tr>
+
+               
+                <tr *ngIf="!isLoading && displayVendors.length === 0">
+                  <td colspan="6" class="text-center py-5">
+                    <i class="bi bi-inbox fs-1 text-muted d-block mb-2"></i>
+                    <p class="text-muted mb-0">No vendors found matching your search.</p>
+                  </td>
+                </tr>
+
+                <tr *ngFor="let v of displayVendors">
+                  <td class="p-3">
+                    <div class="d-flex align-items-center gap-2">
+                      <div class="d-flex align-items-center justify-content-center rounded-circle bg-primary bg-opacity-10 text-primary fw-bold"
+                           style="width: 36px; height: 36px; font-size: 14px;">
+                        {{ v.name.charAt(0).toUpperCase() }}
+                      </div>
+                      <span class="fw-semibold">{{ v.name }}</span>
+                    </div>
+                  </td>
+
+                  <td class="p-3 text-muted">
+                    <i class="bi bi-envelope me-2 text-muted"></i>{{ v.email }}
+                  </td>
+                  <td class="p-3 text-muted">
+                    <i class="bi bi-telephone me-2 text-muted"></i>{{ v.phone }}
+                  </td>
+                  <td class="p-3">
+                    <ng-container *ngIf="v.locationDetails && v.locationDetails.length > 0; else noDetails">
+                      <span class="badge rounded-pill px-3 py-2 fw-semibold d-inline-flex align-items-center gap-1"
+                            [ngClass]="{
+                              'bg-success-subtle text-success border border-success': v.locationDetails[0].approvalStatus === 'APPROVED',
+                              'bg-danger-subtle text-danger border border-danger': v.locationDetails[0].approvalStatus === 'REJECTED',
+                              'bg-warning-subtle text-warning-emphasis border border-warning': v.locationDetails[0].approvalStatus === 'PENDING'
+                            }">
+                        <span class="d-inline-block rounded-circle"
+                              style="width: 6px; height: 6px;"
+                              [ngClass]="{
+                                'bg-success': v.locationDetails[0].approvalStatus === 'APPROVED',
+                                'bg-danger': v.locationDetails[0].approvalStatus === 'REJECTED',
+                                'bg-warning': v.locationDetails[0].approvalStatus === 'PENDING'
+                              }"></span>
+                        {{ v.locationDetails[0].approvalStatus }}
+                      </span>
+                    </ng-container>
+
+                    <ng-template #noDetails>
+                      <span class="badge rounded-pill bg-warning-subtle text-warning-emphasis border border-warning px-3 py-2 fw-semibold d-inline-flex align-items-center gap-1">
+                        <span class="d-inline-block rounded-circle bg-warning" style="width: 6px; height: 6px;"></span>
+                        N/A
+                      </span>
+                    </ng-template>
+                  </td>
+                  <td class="p-3 text-center">
+                    <button class="btn btn-sm btn-outline-primary rounded-pill px-3"
+                            (click)="viewVendor(v.vendorId)"
+                            title="View details">
+                      <i class="bi bi-eye-fill me-1"></i> View
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div> -->
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-2 p-0">
+      <app-sidebar></app-sidebar>
+    </div>
+
+    <div class="col-md-10 p-0 bg-light min-vh-100">
+      <div class="container-fluid py-4 px-4">
+        <div
+          class="d-flex justify-content-between align-items-center pb-3 mb-4 border-bottom"
+        >
+          <div>
+            <div
+              class="text-uppercase text-muted small fw-semibold mb-1"
+              style="letter-spacing: 0.1em"
+            >
+              Management
+            </div>
+            <h1 class="h3 fw-bold mb-1">Vendors</h1>
+            <p class="text-muted small mb-0">
+              Overview of all registered parking partners and their locations
+            </p>
+          </div>
+
+          <div class="d-flex align-items-center gap-3 justify-content-end">
+            <div class="input-group shadow-sm" style="width: 280px">
+              <span class="input-group-text bg-white border-end-0">
+                <i class="bi bi-search text-muted"></i>
+              </span>
+              <input
+                type="text"
+                class="form-control border-start-0 ps-0"
+                placeholder="Search vendors or locations..."
+                (input)="onSearch($event)"
+              />
+            </div>
+
+            <select
+              class="form-select shadow-sm fw-semibold"
+              style="width: auto; min-width: 150px"
+              [ngClass]="{
+                'text-success border-success': selectedStatus === 'APPROVED',
+                'text-danger border-danger': selectedStatus === 'REJECTED',
+                'text-warning-emphasis border-warning':
+                  selectedStatus === 'PENDING' || selectedStatus === 'NA',
+                'text-dark': selectedStatus === 'ALL' || !selectedStatus,
+              }"
+              (change)="onFilterChange($event)"
+            >
+              <option value="ALL" class="text-dark fw-semibold">
+                All Status
+              </option>
+              <option value="APPROVED" class="text-success fw-semibold">
+                Approved
+              </option>
+              <option value="PENDING" class="text-warning-emphasis fw-semibold">
+                Pending
+              </option>
+              <option value="REJECTED" class="text-danger fw-semibold">
+                Rejected
+              </option>
+              <option value="NA" class="text-warning-emphasis fw-semibold">
+                N/A
+              </option>
+            </select>
+          </div>
+        </div>
+
+        <div class="d-flex align-items-center gap-2 mb-3">
+          <span class="badge bg-white text-dark border px-3 py-2 fw-normal">
+            <i class="bi bi-geo-alt-fill me-1 text-primary"></i>
+            Total: <span class="fw-bold ms-1">{{ displayVendors.length }}</span>
+          </span>
+        </div>
+
+        <div class="card shadow-sm border-0 rounded-3 overflow-hidden">
+          <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+              <thead style="background-color: #f8f9fa">
+                <tr>
+                  <th
+                    class="p-3 text-uppercase small fw-semibold text-muted"
+                    style="letter-spacing: 0.05em"
+                  >
+                    Name
+                  </th>
+                  <th
+                    class="p-3 text-uppercase small fw-semibold text-muted"
+                    style="letter-spacing: 0.05em"
+                  >
+                    Location
+                  </th>
+                  <th
+                    class="p-3 text-uppercase small fw-semibold text-muted"
+                    style="letter-spacing: 0.05em"
+                  >
+                    Email
+                  </th>
+                  <th
+                    class="p-3 text-uppercase small fw-semibold text-muted"
+                    style="letter-spacing: 0.05em"
+                  >
+                    Phone
+                  </th>
+                  <th
+                    class="p-3 text-uppercase small fw-semibold text-muted"
+                    style="letter-spacing: 0.05em"
+                  >
+                    Status
+                  </th>
+                  <th
+                    class="p-3 text-uppercase small fw-semibold text-muted text-center"
+                    style="letter-spacing: 0.05em"
+                  >
+                    Action
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngIf="isLoading">
+                  <td colspan="6" class="text-center py-5">
+                    <div
+                      class="spinner-border text-primary"
+                      role="status"
+                    ></div>
+                    <p class="mt-2 text-muted mb-0">Loading data...</p>
+                  </td>
+                </tr>
+
+                <tr *ngIf="!isLoading && displayVendors.length === 0">
+                  <td colspan="6" class="text-center py-5">
+                    <i class="bi bi-inbox fs-1 text-muted d-block mb-2"></i>
+                    <p class="text-muted mb-0">
+                      No vendors found matching your search.
+                    </p>
+                  </td>
+                </tr>
+
+                <tr *ngFor="let row of displayVendors">
+                  <td class="p-3">
+                    <div class="d-flex align-items-center gap-2">
+                      <div
+                        class="d-flex align-items-center justify-content-center rounded-circle bg-primary bg-opacity-10 text-primary fw-bold"
+                        style="width: 36px; height: 36px; font-size: 14px"
+                      >
+                        {{ row.vendor.name.charAt(0).toUpperCase() }}
+                      </div>
+                      <span class="fw-semibold">{{ row.vendor.name }}</span>
+                    </div>
+                  </td>
+
+                  <td class="p-3">
+                    <span *ngIf="row.location" class="fw-semibold">
+                      <i class="bi bi-geo-alt me-1 text-muted"></i
+                      >{{ row.location.locationName }}
+                    </span>
+                    <span *ngIf="!row.location" class="text-muted fst-italic">
+                      No location
+                    </span>
+                  </td>
+
+                  <td class="p-3 text-muted">
+                    <i class="bi bi-envelope me-2 text-muted"></i
+                    >{{ row.vendor.email }}
+                  </td>
+                  <td class="p-3 text-muted">
+                    <i class="bi bi-telephone me-2 text-muted"></i
+                    >{{ row.vendor.phone }}
+                  </td>
+
+                  <td class="p-3">
+                    <ng-container *ngIf="row.location; else noDetails">
+                      <span
+                        class="badge rounded-pill px-3 py-2 fw-semibold d-inline-flex align-items-center gap-1"
+                        [ngClass]="{
+                          'bg-success-subtle text-success border border-success':
+                            row.location.approvalStatus === 'APPROVED',
+                          'bg-danger-subtle text-danger border border-danger':
+                            row.location.approvalStatus === 'REJECTED',
+                          'bg-warning-subtle text-warning-emphasis border border-warning':
+                            row.location.approvalStatus === 'PENDING',
+                        }"
+                      >
+                        <span
+                          class="d-inline-block rounded-circle"
+                          style="width: 6px; height: 6px"
+                          [ngClass]="{
+                            'bg-success':
+                              row.location.approvalStatus === 'APPROVED',
+                            'bg-danger':
+                              row.location.approvalStatus === 'REJECTED',
+                            'bg-warning':
+                              row.location.approvalStatus === 'PENDING',
+                          }"
+                        ></span>
+                        {{ row.location.approvalStatus }}
+                      </span>
+                    </ng-container>
+
+                    <ng-template #noDetails>
+                      <span
+                        class="badge rounded-pill bg-warning-subtle text-warning-emphasis border border-warning px-3 py-2 fw-semibold d-inline-flex align-items-center gap-1"
+                      >
+                        <span
+                          class="d-inline-block rounded-circle bg-warning"
+                          style="width: 6px; height: 6px"
+                        ></span>
+                        N/A
+                      </span>
+                    </ng-template>
+                  </td>
+
+                  <td class="p-3 text-center">
+                    <button
+                      class="btn btn-sm btn-outline-primary rounded-pill px-3"
+                      (click)="
+                        viewVendor(
+                          row.vendor.vendorId,
+                          row.location
+                            ? row.vendor.locationDetails.indexOf(row.location)
+                            : 0
+                        )
+                      "
+                      title="View details"
+                    >
+                      <i class="bi bi-eye-fill me-1"></i> View
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

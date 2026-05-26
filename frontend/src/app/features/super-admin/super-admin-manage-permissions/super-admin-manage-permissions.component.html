@@ -1,0 +1,127 @@
+<div *ngIf="notificationMessage"
+     class="position-fixed top-0 end-0 p-3" style="z-index: 1050">
+  <div class="alert shadow-sm border-0 fw-bold"
+       [ngClass]="notificationIsError ? 'alert-danger' : 'alert-dark'">
+    {{ notificationMessage }}
+  </div>
+</div>
+
+<div class="container-fluid py-4 bg-light min-vh-100" *ngIf="!isLoading">
+
+  <div class="d-flex align-items-center mb-4">
+    <button class="btn btn-outline-secondary btn-sm me-3 border-0" (click)="goBack()">
+      ← Back
+    </button>
+    <div>
+      <h2 class="fw-bold mb-0">User Permissions Overview</h2>
+      <p class="text-muted small mb-0">Manage granular access controls for {{ user.name }}</p>
+    </div>
+  </div>
+
+  <div class="row g-4">
+
+    <!-- Left column: identity + quick actions -->
+    <div class="col-lg-4">
+      <div class="card shadow-sm border-0 rounded-4 h-100">
+        <div class="card-body text-center py-5">
+
+          <div class="bg-navy-black text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3 shadow"
+               style="width: 80px; height: 80px; font-size: 2rem; font-weight: bold;">
+            {{ user.name.charAt(0) | uppercase }}
+          </div>
+
+          <h4 class="fw-bold mb-1">{{ user.name }}</h4>
+          <p class="text-muted small mb-2">
+            {{ user.email || 'No email' }} | {{ user.phone }}
+          </p>
+
+          <span class="badge bg-dark px-3 py-2 mb-2">{{ user.role }}</span>
+
+          <div class="mb-4">
+            <span class="badge px-3 py-2"
+                  [ngClass]="user.accountStatus === 'ACTIVE' ? 'bg-success' : 'bg-danger'">
+              {{ user.accountStatus }}
+            </span>
+          </div>
+
+          <hr class="text-muted mb-4">
+
+          <div class="d-grid gap-3 text-start">
+            <h6 class="text-muted fw-bold small text-uppercase mb-0">Quick Actions</h6>
+
+            <button class="btn py-2 fw-semibold"
+                    [disabled]="user.role === 'SUPER_ADMIN' || isUpdatingStatus"
+                    [ngClass]="user.accountStatus === 'ACTIVE' ? 'btn-outline-red' : 'btn-outline-green'"
+                    (click)="suspendUser()"
+                    [title]="user.role === 'SUPER_ADMIN' ? 'Super admin accounts cannot be modified' : ''">
+              <span *ngIf="isUpdatingStatus" class="spinner-border spinner-border-sm me-2"></span>
+              {{ user.accountStatus === 'ACTIVE' ? 'Suspend Account' : 'Reactivate Account' }}
+            </button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Right column: permission groups (vendors only) -->
+    <div class="col-lg-8">
+
+      <ng-container *ngIf="user.role === 'VENDOR'; else nonVendorMessage">
+
+        <div class="card shadow-sm border-0 rounded-4 mb-4"
+             *ngFor="let group of permissionGroups">
+          <div class="card-header bg-white border-bottom pt-4 pb-3">
+            <h5 class="fw-bold mb-0">{{ group.title }}</h5>
+            <small class="text-muted">{{ group.subtitle }}</small>
+          </div>
+          <div class="card-body pt-3">
+
+            <ng-container *ngFor="let perm of group.permissions; let last = last">
+              <div class="d-flex justify-content-between align-items-center py-2">
+                <div class="flex-grow-1 me-3">
+                  <h6 class="mb-0 fw-semibold">{{ perm.title }}</h6>
+                  <small class="text-muted">{{ perm.description }}</small>
+                </div>
+                <div class="d-flex align-items-center gap-2">
+                  <div *ngIf="isSavingPermission(perm.key)"
+                       class="spinner-border spinner-border-sm text-muted"
+                       role="status"
+                       aria-label="Saving"></div>
+                  <div class="form-check form-switch fs-4 mb-0">
+                    <input class="form-check-input cursor-pointer"
+                           type="checkbox"
+                           [checked]="hasPermission(perm.key)"
+                           [disabled]="isSavingPermission(perm.key)"
+                           (change)="togglePermission(perm.key, $event)">
+                  </div>
+                </div>
+              </div>
+
+              <hr *ngIf="!last" class="text-light-subtle my-2">
+            </ng-container>
+
+          </div>
+        </div>
+
+      </ng-container>
+
+      <ng-template #nonVendorMessage>
+        <div class="card shadow-sm border-0 rounded-4 bg-light">
+          <div class="card-body text-center py-5">
+            <h5 class="fw-bold text-muted mb-2">
+              {{ user.role === 'SUPER_ADMIN' ? 'Super Admin Account' : 'Standard Customer Account' }}
+            </h5>
+            <p class="text-muted small mb-0">
+              {{
+                user.role === 'SUPER_ADMIN'
+                  ? 'Super admins have implicit access to all features. Their permissions are not configurable.'
+                  : 'No advanced permissions are required for this user type.'
+              }}
+            </p>
+          </div>
+        </div>
+      </ng-template>
+
+    </div>
+  </div>
+</div>

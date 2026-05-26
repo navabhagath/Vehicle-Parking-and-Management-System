@@ -1,0 +1,20 @@
+.parking-map-wrapper {
+  max-width: 330px; // stays same on mobile
+
+  @media (min-width: 768px) {
+    max-width: 100%;
+  }
+}
+
+.parking-map-img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 330 / 188;
+  object-fit: cover;
+  border-radius: 20px;
+  cursor: pointer;
+
+  @media (min-width: 768px) {
+    max-height: 280px;
+  }
+}

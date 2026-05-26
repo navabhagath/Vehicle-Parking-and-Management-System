@@ -1,0 +1,45 @@
+
+:host {
+  display: inline-block;
+}
+
+.shadow-premium {
+  box-shadow: 1px 1px 9.9px -1px rgba(87, 87, 87, 0.25) !important;
+}
+
+.loc-border {
+  border-radius: 15px;
+}
+.no-caret::after {
+  display: none 
+}
+
+.dropdown-toggle {
+  background: #fff;
+  border: none;
+  color: #2F2F2F;
+  font-size: 0.85rem;
+  padding: 8px 16px;
+  overflow:auto;
+  max-width: 200px;
+}
+
+.dropdown-menu {
+  min-width: 200px;
+  overflow: auto;
+  max-width: 300px;
+
+  .dropdown-item {
+    font-size: 0.85rem;
+    color: #2F2F2F;
+
+    &:hover {
+      background: rgba(75, 210, 248, 0.1);
+    }
+
+    &.active {
+      background: #4BD2F8;
+      color: #fff;
+    }
+  }
+}

@@ -1,0 +1,251 @@
+/* raise-ticket.component.scss */
+ 
+// ── SCSS Variables (must be top-level, NOT inside :root) ──
+$grey-stroke: #D0D0D0;
+$green: #33AD5F;
+$yellow: #FFDF66;
+$black: #2F2F2F;
+$input: #F7F7F7;
+$navy-black: #130F26;
+$light-blue: #4BD2F8;
+$red: #f32c44;
+$white: #fcfcfc;
+$bg-color: #fcfcfe;
+$shadow: #575757;
+$input-blue: rgba(217, 247, 255, 0.25);
+ 
+.raise-ticket-wrapper {
+  max-width: 480px;
+  margin: 0 auto;
+  min-height: 100vh;
+  background-color: $white;
+}
+ 
+/* ── Header ── */
+.ticket-header {
+  border-bottom: 1px solid $grey-stroke;
+ 
+  h5 {
+    font-size: 1.125rem;
+    color: $navy-black;
+  }
+}
+ 
+.back-btn {
+  font-size: 1.25rem;
+  color: $navy-black;
+  padding: 0;
+  line-height: 1;
+ 
+  &:hover,
+  &:focus {
+    color: $green;
+  }
+}
+ 
+/* ── Form ── */
+.ticket-form {
+ 
+  .form-label {
+    font-size: 0.875rem;
+    color: $navy-black;
+    margin-bottom: 0.5rem;
+  }
+}
+ 
+/* ── Input fields ── */
+.ticket-input {
+  background-color: $input;
+  border: 1.5px solid $grey-stroke;
+  border-radius: 12px;
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+  color: $black;
+  transition: border-color 0.2s ease;
+ 
+  &::placeholder {
+    color: lighten($black, 40%);
+  }
+ 
+  &:focus {
+    border-color: $green;
+    box-shadow: 0 0 0 3px rgba($green, 0.12);
+    background-color: $input;
+  }
+}
+ 
+/* ── Upload Image ── */
+.upload-box {
+  width: 60px;
+  height: 60px;
+  border-radius: 12px;
+  border: 1.5px dashed $grey-stroke;
+  background-color: $input;
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+ 
+  &:hover {
+    border-color: $green;
+  }
+ 
+  .plus-icon {
+    font-size: 1.5rem;
+    color: $grey-stroke;
+    line-height: 1;
+  }
+}
+ 
+.upload-thumb {
+  width: 60px;
+  height: 60px;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1.5px solid $grey-stroke;
+ 
+  .thumb-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+ 
+.remove-btn {
+  background: rgba($red, 0.85);
+  color: #fff;
+  font-size: 0.75rem;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  line-height: 20px;
+  border-radius: 50%;
+  text-align: center;
+}
+ 
+/* ── Booking Dropdown ── */
+.dropdown-toggle {
+  &::after {
+    margin-left: auto;
+  }
+}
+ 
+.booking-dropdown {
+  border-radius: 12px;
+  border: 1.5px solid $grey-stroke;
+  max-height: 300px;
+  overflow-y: auto;
+ 
+  /* Custom scrollbar */
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: $grey-stroke;
+    border-radius: 4px;
+  }
+}
+ 
+.dropdown-item-wrapper {
+  cursor: pointer;
+ 
+  &:not(:last-child) .booking-option {
+    border-bottom: 1px solid lighten($grey-stroke, 8%);
+  }
+ 
+  &:hover .booking-option {
+    background-color: rgba($green, 0.06);
+  }
+}
+ 
+.booking-option {
+  transition: background-color 0.15s ease;
+ 
+  &.active {
+    background-color: rgba($green, 0.1);
+    border-left: 3px solid $green;
+  }
+}
+ 
+.booking-vehicle {
+  font-size: 0.875rem;
+  color: $navy-black;
+}
+ 
+.booking-details {
+  font-size: 0.75rem;
+  color: lighten($black, 20%);
+}
+ 
+.booking-date {
+  font-size: 0.7rem;
+ 
+  i {
+    font-size: 0.7rem;
+  }
+}
+ 
+/* ── Submit Button ── */
+.submit-btn {
+  border-radius: 50px;
+  padding: 0.85rem 2rem;
+  font-size: 1rem;
+  max-width: 320px;
+  transition: all 0.2s ease;
+ 
+  &:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+  }
+ 
+  &:active {
+    transform: translateY(0);
+  }
+}
+ 
+/* ── Responsive: tablet+ ── */
+@media (min-width: 576px) {
+  .raise-ticket-wrapper {
+    margin-top: 1rem;
+    border-radius: 16px;
+    min-height: auto;
+    box-shadow: 1px 1px 9.9px -1px rgba(87, 87, 87, 0.25);
+    padding-bottom: 1rem;
+  }
+ 
+  .ticket-header {
+    border-radius: 16px 16px 0 0;
+  }
+ 
+  .booking-date {
+    font-size: 0.75rem;
+  }
+}
+ 
+/* ── Category Dropdown ── */
+.category-dropdown {
+  border-radius: 12px;
+  border: 1.5px solid $grey-stroke;
+  overflow: hidden;
+}
+ 
+.category-item {
+  font-size: 0.875rem;
+  color: $black;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+ 
+  &:not(:last-child) {
+    border-bottom: 1px solid lighten($grey-stroke, 8%);
+  }
+ 
+  &:hover {
+    background-color: rgba($green, 0.06);
+  }
+ 
+  &.active {
+    background-color: rgba($green, 0.1);
+    color: $green;
+    font-weight: 600;
+  }
+}
+ 
+ 

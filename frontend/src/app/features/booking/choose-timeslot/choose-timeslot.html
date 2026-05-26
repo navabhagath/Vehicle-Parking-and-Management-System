@@ -1,0 +1,54 @@
+<div class="timeslot-wrapper">
+
+  <div class="section-header">
+    <button class="btn-back" (click)="goBack()">
+      <i class="bi bi-arrow-left"></i>
+    </button>
+    <h2 class="section-title">Select <span class="highlight">Duration</span></h2>
+  </div>
+
+  <div class="duration-grid">
+    @for (option of durationOptions; track option.value) {
+      <button
+        class="duration-pill"
+        [class.selected]="selectedOption === option.value"
+        (click)="selectOption(option.value)">
+        <span class="pill-label">{{ option.label }}</span>
+        @if (option.hours !== null) {
+          <span class="pill-price">₹{{ option.hours * pricePerHour }}</span>
+        } @else {
+          <span class="pill-price">Custom</span>
+        }
+      </button>
+    }
+  </div>
+
+  @if (selectedOption === 'more') {
+    <div class="custom-duration-card">
+      <p class="custom-label">Custom Duration</p>
+      <div class="stepper">
+        <button class="stepper-btn" (click)="decrement()" [disabled]="customHours <= 1">
+          <i class="bi bi-dash"></i>
+        </button>
+        <span class="stepper-value">{{ customHours }} hrs</span>
+        <button class="stepper-btn" (click)="increment()">
+          <i class="bi bi-plus"></i>
+        </button>
+      </div>
+    </div>
+  }
+
+  <div class="confirm-wrapper">
+    <button
+      class="confirm-btn"
+      [disabled]="!selectedOption || isSubmitting"
+      (click)="confirmDuration()">
+      @if (isSubmitting) {
+        <span>Booking...</span>
+      } @else {
+        <span>Book</span>
+      }
+    </button>
+  </div>
+
+</div>

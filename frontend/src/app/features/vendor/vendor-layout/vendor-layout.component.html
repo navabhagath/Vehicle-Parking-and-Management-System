@@ -1,0 +1,78 @@
+<div class="d-flex" style="min-height:100vh;">
+
+  <!-- mobile -->
+  <div
+    class="sidebar-overlay"
+    [class.active] = "sidebarOpen"
+    (click)="toggleSidebar()">
+  </div>
+
+  <!-- Sidebar -->
+  <nav class="sidebar" [class.open] = "sidebarOpen">
+
+    <!-- Header -->
+    <div class="p-3 border-bottom d-flex justify-content-between align-items-center">
+      <div>
+        <h6 class="fw-bold mb-0">ParkEase</h6>
+        <small class="text-muted">Parking Management</small>
+      </div>
+      <button class="btn btn-sm btn-close d-lg-none" (click)="toggleSidebar()"></button>
+    </div>
+
+    <!-- Current Location -->
+    <div class="mx-3 mt-3 p-2 border rounded bg-light">
+      <small class="text-black d-block">
+        <i class="bi bi-geo-alt me-1"></i> Current Location
+      </small>
+      <strong class="d-block" style="font-size:14px;">{{ locationName }}</strong>
+      <small
+        class="sidebar-change-link  text-muted"
+        (click)="goBackToLanding()">
+        Change location
+      </small>
+    </div>
+
+    <!-- Menu Items -->
+    <ul class="nav flex-column mt-3 px-2 flex-grow-1">
+      <li class="nav-item" *ngFor="let item of menuItems">
+        <a
+          class="nav-link rounded px-3 py-2 mb-1 d-flex align-items-center gap-2 "
+          [class.active]="activeMenu === item.key"
+          [class.bg-light-blue]="activeMenu === item.key"
+          [class.fw-semibold]="activeMenu === item.key"
+          [class.text-black]="activeMenu === item.key"
+          [class.text-dark]="activeMenu !== item.key"
+          (click)="onMenuClick(item.key)">
+          <i class="bi" [ngClass]="item.icon"></i>{{ item.label }}
+        </a>
+      </li>
+    </ul>
+    <!-- Logout -->
+    <div class="p-3">
+      <button
+        class="btn btn-red w-100 d-flex align-items-center justify-content-center gap-2"
+        (click)="logout()">
+        <i class="bi bi-box-arrow-right"></i> Logout
+      </button>
+    </div>
+  </nav>
+
+  <!-- Main Content Area -->
+  <div class="flex-grow-1">
+    <div class="main-content" [class.shifted]="sidebarOpen">
+
+      <!-- Top Bar -->
+      <div class="top-bar d-flex align-items-center border-bottom bg-white sticky-top">
+        <button class="btn btn-sm btn-outline-secondary me-3 d-lg-none" (click)="toggleSidebar()">
+          <i class="bi bi-list fs-5"></i>
+        </button>
+        <h5 class="mb-0 fw-bold">{{ activeLabel }}</h5>
+      </div>
+
+      <!-- Child routes render here -->
+      <router-outlet></router-outlet>
+
+    </div>
+  </div>
+
+</div>

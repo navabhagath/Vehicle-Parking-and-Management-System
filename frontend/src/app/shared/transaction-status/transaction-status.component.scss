@@ -1,0 +1,165 @@
+$green: #2ecc71;
+$green-dark: #27ae60;
+$red: #e74c3c;
+$red-dark: #c0392b;
+ 
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+ 
+.status-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 2.5rem 2rem;
+  border-radius: 1.5rem;
+  background: #fff;
+  width: min(85vw, 340px);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+  position: relative;
+}
+ 
+/* ---------- Icon Circles ---------- */
+.icon-circle {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+ 
+.success-circle {
+  background: $green;
+  box-shadow: 0 8px 30px rgba($green, 0.45);
+}
+ 
+.error-circle {
+  background: $red;
+  box-shadow: 0 8px 30px rgba($red, 0.45);
+}
+ 
+/* ---------- Checkmark Animation ---------- */
+.checkmark {
+  width: 48px;
+  height: 48px;
+}
+ 
+.checkmark-check {
+  stroke: #fff;
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 34;
+  stroke-dashoffset: 34;
+  animation: draw-check 0.5s ease 0.3s forwards;
+}
+ 
+@keyframes draw-check {
+  to { stroke-dashoffset: 0; }
+}
+ 
+/* ---------- Crossmark Animation ---------- */
+.crossmark {
+  width: 44px;
+  height: 44px;
+}
+ 
+.crossmark-line {
+  stroke: #fff;
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-dasharray: 28;
+  stroke-dashoffset: 28;
+  animation: draw-cross 0.4s ease 0.3s forwards;
+}
+ 
+@keyframes draw-cross {
+  to { stroke-dashoffset: 0; }
+}
+ 
+/* ---------- Spinner ---------- */
+.spinner-ring {
+  width: 80px;
+  height: 80px;
+  border: 5px solid #e0e0e0;
+  border-top-color: $green;
+  border-radius: 50%;
+  animation: spin 0.9s linear infinite;
+}
+ 
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+ 
+/* ---------- Text ---------- */
+.status-text {
+  font-size: 1.35rem;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+}
+ 
+.success-text { color: $green-dark; }
+.error-text   { color: $red-dark; }
+ 
+.status-subtext {
+  font-size: 0.9rem;
+  color: #777;
+  max-width: 260px;
+  line-height: 1.4;
+}
+ 
+.balance-text {
+  margin-top: 0.75rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #333;
+  background: #f0faf4;
+  padding: 0.5rem 1.25rem;
+  border-radius: 2rem;
+}
+ 
+/* ---------- Retry Button ---------- */
+.retry-btn {
+  border: none;
+  background: $red;
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.95rem;
+  padding: 0.65rem 2rem;
+  border-radius: 2rem;
+  cursor: pointer;
+  transition: background 0.2s;
+ 
+  &:hover { background: $red-dark; }
+}
+ 
+.close-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: none;
+  border: none;
+  font-size: 1.1rem;
+  color: #999;
+  cursor: pointer;
+  line-height: 1;
+  padding: 4px 8px;
+  border-radius: 50%;
+  transition: background 0.15s;
+ 
+  &:hover {
+    background: rgba(0, 0, 0, 0.08);
+    color: #555;
+  }
+}
+ 

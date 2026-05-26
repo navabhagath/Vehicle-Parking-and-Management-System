@@ -1,0 +1,556 @@
+<div class="page-wrapper">
+  <div class="form-card">
+    <!-- Header -->
+    <div class="form-header">
+      <button type="button" class="btn-back" (click)="goBack()">
+        <i class="bi bi-arrow-left" style="font-size: 16px"></i>
+      </button>
+      <div>
+        <h5 class="form-title">Add New Location</h5>
+        <p class="form-subtitle">
+          Fill in the details to register your parking location
+        </p>
+      </div>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <div class="two-col-grid">
+        <div class="col-section">
+          <div class="section-label">Location Details</div>
+
+          <!-- Location Name -->
+          <div>
+            <label class="field-label"
+              >Location Name <span class="req">*</span></label
+            >
+            <input
+              type="text"
+              formControlName="locationName"
+              class="form-control"
+              [class.is-invalid]="
+                form.get('locationName')?.invalid &&
+                (form.get('locationName')?.dirty ||
+                  form.get('locationName')?.touched)
+              "
+              placeholder="e.g., Downtown Mall Parking"
+            />
+            <div class="error-slot">
+              <small
+                class="text-danger"
+                [style.visibility]="
+                  form.get('locationName')?.invalid &&
+                  (form.get('locationName')?.dirty ||
+                    form.get('locationName')?.touched)
+                    ? 'visible'
+                    : 'hidden'
+                "
+              >
+                <ng-container
+                  *ngIf="form.get('locationName')?.hasError('required')"
+                  >Location name is required.</ng-container
+                >
+                <ng-container
+                  *ngIf="form.get('locationName')?.hasError('allSpaces')"
+                  >Name cannot be only spaces.</ng-container
+                >
+                <ng-container
+                  *ngIf="form.get('locationName')?.hasError('minlength')"
+                  >Minimum 5 characters.</ng-container
+                >
+                <ng-container
+                  *ngIf="form.get('locationName')?.hasError('pattern')"
+                  >Must start with a letter. Only letters, numbers, and spaces
+                  allowed.</ng-container
+                >
+                <ng-container
+                  *ngIf="form.get('locationName')?.hasError('nameExists')"
+                  >This location name already exists. Choose a different
+                  name.</ng-container
+                >
+              </small>
+              <small
+                *ngIf="form.get('locationName')?.pending"
+                class="text-muted"
+              >
+                Checking availability...
+              </small>
+            </div>
+          </div>
+
+          <!-- Coordinates -->
+          <div class="section-label mt-1">Coordinates</div>
+          <div formGroupName="geo">
+            <div class="row g-2 mb-2" formArrayName="coordinates">
+              <div class="col-6">
+                <label class="field-label"
+                  >Latitude <span class="req">*</span></label
+                >
+                <input
+                  type="number"
+                  [formControlName]="1"
+                  class="form-control"
+                  [class.is-invalid]="
+                    form.get('geo.coordinates.1')?.invalid &&
+                    form.get('geo.coordinates.1')?.touched
+                  "
+                  placeholder="e.g. 13.0405"
+                  step="0.0001"
+                  readonly
+                />
+                <div class="error-slot">
+                  <small
+                    class="text-danger"
+                    [style.visibility]="
+                      form.get('geo.coordinates.1')?.invalid &&
+                      form.get('geo.coordinates.1')?.touched
+                        ? 'visible'
+                        : 'hidden'
+                    "
+                  >
+                    <ng-container
+                      *ngIf="
+                        form.get('geo.coordinates.1')?.hasError('required')
+                      "
+                      >Latitude is required.</ng-container
+                    >
+                    <ng-container
+                      *ngIf="
+                        form.get('geo.coordinates.1')?.hasError('min') ||
+                        form.get('geo.coordinates.1')?.hasError('max')
+                      "
+                    >
+                      Must be between -90 and 90.
+                    </ng-container>
+                  </small>
+                </div>
+              </div>
+              <div class="col-6">
+                <label class="field-label"
+                  >Longitude <span class="req">*</span></label
+                >
+                <input
+                  type="number"
+                  [formControlName]="0"
+                  class="form-control"
+                  [class.is-invalid]="
+                    form.get('geo.coordinates.0')?.invalid &&
+                    form.get('geo.coordinates.0')?.touched
+                  "
+                  placeholder="e.g. 80.2319"
+                  step="0.0001"
+                  readonly
+                />
+                <div class="error-slot">
+                  <small
+                    class="text-danger"
+                    [style.visibility]="
+                      form.get('geo.coordinates.0')?.invalid &&
+                      form.get('geo.coordinates.0')?.touched
+                        ? 'visible'
+                        : 'hidden'
+                    "
+                  >
+                    <ng-container
+                      *ngIf="
+                        form.get('geo.coordinates.0')?.hasError('required')
+                      "
+                      >Longitude is required.</ng-container
+                    >
+                    <ng-container
+                      *ngIf="
+                        form.get('geo.coordinates.0')?.hasError('min') ||
+                        form.get('geo.coordinates.0')?.hasError('max')
+                      "
+                    >
+                      Must be between -180 and 180.
+                    </ng-container>
+                  </small>
+                </div>
+              </div>
+              <div class="col-12">
+                <button
+                  type="button"
+                  class="btn btn-yellow btn-sm w-100"
+                  (click)="getCurrentLocation()"
+                  [disabled]="isFetchingLocation"
+                >
+                  <i class="bi bi-crosshair me-1"></i>
+                  {{
+                    isFetchingLocation ? "Fetching..." : "Get Current Location"
+                  }}
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- GST Document -->
+          <div class="section-label mt-2">Documents</div>
+          <div class="mb-2">
+            <label class="field-label"
+              >GST Certificate <span class="req">*</span></label
+            >
+            <input
+              type="file"
+              accept="application/pdf,image/jpeg,image/png"
+              (change)="onFileSelected($event)"
+              class="form-control"
+              [class.is-invalid]="!!gstFileError"
+            />
+            <div class="error-slot">
+              <small
+                class="text-danger"
+                [style.visibility]="gstFileError ? 'visible' : 'hidden'"
+              >
+                {{ gstFileError || "placeholder" }}
+              </small>
+              <small *ngIf="gstFile && !gstFileError" class="text-muted">
+                Selected: {{ gstFile.name }}
+              </small>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-divider"></div>
+
+        <div class="col-section">
+          <!-- Operational Days -->
+          <div class="section-label">Schedule</div>
+          <div class="mb-2">
+            <label class="field-label"
+              >Operational Days <span class="req">*</span></label
+            >
+            <div
+              formArrayName="operationalDays"
+              class="days-grid"
+              [class.days-invalid]="
+                operationalDaysArray.invalid && operationalDaysArray.touched
+              "
+            >
+              <label
+                *ngFor="let day of operationalDays; let i = index"
+                class="day-chip"
+              >
+                <input
+                  type="checkbox"
+                  [formControlName]="i"
+                  class="d-none"
+                  (change)="onDayChange()"
+                />
+                <span>{{ day.day.slice(0, 3) }}</span>
+              </label>
+            </div>
+            <div class="error-slot mt-1">
+              <small
+                class="text-danger"
+                [style.visibility]="
+                  operationalDaysArray.invalid && operationalDaysArray.touched
+                    ? 'visible'
+                    : 'hidden'
+                "
+              >
+                Select at least one day.
+              </small>
+            </div>
+          </div>
+
+          <!-- Operational Hours -->
+          <div class="mb-2" formGroupName="operationalHours">
+            <label class="field-label"
+              >Operational Hours <span class="req">*</span></label
+            >
+            <div class="row g-2">
+              <div class="col-6">
+                <label class="field-label-sm">Start Time</label>
+                <input
+                  type="time"
+                  formControlName="start"
+                  class="form-control"
+                  [class.is-invalid]="
+                    form.get('operationalHours.start')?.invalid &&
+                    form.get('operationalHours.start')?.touched
+                  "
+                />
+                <div class="error-slot">
+                  <small
+                    class="text-danger"
+                    [style.visibility]="
+                      form.get('operationalHours.start')?.invalid &&
+                      form.get('operationalHours.start')?.touched
+                        ? 'visible'
+                        : 'hidden'
+                    "
+                  >
+                    Start time is required.
+                  </small>
+                </div>
+              </div>
+              <div class="col-6">
+                <label class="field-label-sm">End Time</label>
+                <input
+                  type="time"
+                  formControlName="end"
+                  class="form-control"
+                  [class.is-invalid]="
+                    form.get('operationalHours.end')?.invalid &&
+                    form.get('operationalHours.end')?.touched
+                  "
+                />
+                <div class="error-slot">
+                  <small
+                    class="text-danger"
+                    [style.visibility]="
+                      form.get('operationalHours.end')?.invalid &&
+                      form.get('operationalHours.end')?.touched
+                        ? 'visible'
+                        : 'hidden'
+                    "
+                  >
+                    End time is required.
+                  </small>
+                </div>
+              </div>
+            </div>
+            <div class="error-slot">
+              <small
+                class="text-danger"
+                [style.visibility]="
+                  form.hasError('invalidTimeRange') &&
+                  form.get('operationalHours.end')?.touched
+                    ? 'visible'
+                    : 'hidden'
+                "
+              >
+                End time must be after start time.
+              </small>
+            </div>
+          </div>
+
+          <!-- Capacity -->
+          <div class="section-label mt-2">Capacity & Pricing</div>
+          <div class="mb-2" formGroupName="capacity">
+            <label class="field-label"
+              >Parking Slots <span class="req">*</span></label
+            >
+            <div class="row g-2">
+              <div class="col-6">
+                <label class="field-label-sm">2W Slots</label>
+                <input
+                  type="number"
+                  formControlName="twoWheeler"
+                  class="form-control"
+                  [class.is-invalid]="
+                    form.get('capacity.twoWheeler')?.invalid &&
+                    form.get('capacity.twoWheeler')?.touched
+                  "
+                  placeholder="e.g. 150"
+                />
+                <div class="error-slot">
+                  <small
+                    class="text-danger"
+                    [style.visibility]="
+                      form.get('capacity.twoWheeler')?.invalid &&
+                      form.get('capacity.twoWheeler')?.touched
+                        ? 'visible'
+                        : 'hidden'
+                    "
+                  >
+                    <ng-container
+                      *ngIf="
+                        form.get('capacity.twoWheeler')?.hasError('required')
+                      "
+                      >Required.</ng-container
+                    >
+                    <ng-container
+                      *ngIf="form.get('capacity.twoWheeler')?.hasError('min')"
+                      >Cannot be negative.</ng-container
+                    >
+                  </small>
+                </div>
+              </div>
+              <div class="col-6">
+                <label class="field-label-sm">4W Slots</label>
+                <input
+                  type="number"
+                  formControlName="fourWheeler"
+                  class="form-control"
+                  [class.is-invalid]="
+                    form.get('capacity.fourWheeler')?.invalid &&
+                    form.get('capacity.fourWheeler')?.touched
+                  "
+                  placeholder="e.g. 50"
+                />
+                <div class="error-slot">
+                  <small
+                    class="text-danger"
+                    [style.visibility]="
+                      form.get('capacity.fourWheeler')?.invalid &&
+                      form.get('capacity.fourWheeler')?.touched
+                        ? 'visible'
+                        : 'hidden'
+                    "
+                  >
+                    <ng-container
+                      *ngIf="
+                        form.get('capacity.fourWheeler')?.hasError('required')
+                      "
+                      >Required.</ng-container
+                    >
+                    <ng-container
+                      *ngIf="form.get('capacity.fourWheeler')?.hasError('min')"
+                      >Cannot be negative.</ng-container
+                    >
+                  </small>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pricing -->
+          <div class="mb-2">
+            <label class="field-label"
+              >Fare per Hour <span class="req">*</span></label
+            >
+            <div class="row g-2">
+              <div class="col-6">
+                <label class="field-label-sm">Bike Fare</label>
+                <div class="input-group" [class.has-validation]="true">
+                  <span class="input-group-text">₹</span>
+                  <input
+                    type="number"
+                    formControlName="bikePrice"
+                    class="form-control"
+                    [class.is-invalid]="
+                      form.get('bikePrice')?.invalid &&
+                      form.get('bikePrice')?.touched
+                    "
+                    placeholder="30"
+                  />
+                </div>
+                <div class="error-slot">
+                  <small
+                    class="text-danger"
+                    [style.visibility]="
+                      form.get('bikePrice')?.invalid &&
+                      form.get('bikePrice')?.touched
+                        ? 'visible'
+                        : 'hidden'
+                    "
+                  >
+                    <ng-container
+                      *ngIf="form.get('bikePrice')?.hasError('required')"
+                      >Required.</ng-container
+                    >
+                    <ng-container *ngIf="form.get('bikePrice')?.hasError('min')"
+                      >Cannot be negative.</ng-container
+                    >
+                  </small>
+                </div>
+              </div>
+              <div class="col-6">
+                <label class="field-label-sm">Car Fare</label>
+                <div class="input-group" [class.has-validation]="true">
+                  <span class="input-group-text">₹</span>
+                  <input
+                    type="number"
+                    formControlName="carPrice"
+                    class="form-control"
+                    [class.is-invalid]="
+                      form.get('carPrice')?.invalid &&
+                      form.get('carPrice')?.touched
+                    "
+                    placeholder="50"
+                  />
+                </div>
+                <div class="error-slot">
+                  <small
+                    class="text-danger"
+                    [style.visibility]="
+                      form.get('carPrice')?.invalid &&
+                      form.get('carPrice')?.touched
+                        ? 'visible'
+                        : 'hidden'
+                    "
+                  >
+                    <ng-container
+                      *ngIf="form.get('carPrice')?.hasError('required')"
+                      >Required.</ng-container
+                    >
+                    <ng-container *ngIf="form.get('carPrice')?.hasError('min')"
+                      >Cannot be negative.</ng-container
+                    >
+                  </small>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Amenities -->
+          <div class="section-label mt-2">Amenities</div>
+          <div class="mb-2">
+            <label class="field-label"
+              >Available Amenities <span class="req">*</span></label
+            >
+            <div
+              formArrayName="amenities"
+              class="amenities-grid"
+              [class.amenities-invalid]="
+                amenitiesDetailsArray.invalid && amenitiesDetailsArray.touched
+              "
+            >
+              <label
+                *ngFor="let a of amenities; let i = index"
+                class="amenity-chip"
+              >
+                <input
+                  type="checkbox"
+                  [formControlName]="i"
+                  class="d-none"
+                  (change)="onAmenityChange()"
+                />
+                <span>{{ a.prop }}</span>
+              </label>
+            </div>
+            <div class="error-slot mt-1">
+              <small
+                class="text-danger"
+                [style.visibility]="
+                  amenitiesDetailsArray.invalid && amenitiesDetailsArray.touched
+                    ? 'visible'
+                    : 'hidden'
+                "
+              >
+                Select at least one amenity.
+              </small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Submit error -->
+      <div *ngIf="submitError" class="alert alert-danger mt-3 mb-2">
+        Failed to add location. Please try again.
+      </div>
+
+      <!-- Footer -->
+      <div class="form-footer">
+        <button type="button" class="btn btn-light px-4" (click)="goBack()">
+          Cancel
+        </button>
+        <button
+          type="submit"
+          class="btn btn-submit px-5"
+          [disabled]="form.invalid || form.pending || isSubmitting"
+          [class.btn-submit-valid]="form.valid"
+          [class.btn-submit-invalid]="!form.valid"
+        >
+          <span *ngIf="!isSubmitting">
+            <i class="bi bi-plus-circle me-2"></i>Add Location
+          </span>
+          <span *ngIf="isSubmitting">
+            <span class="spinner-border spinner-border-sm me-2"></span>Adding...
+          </span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

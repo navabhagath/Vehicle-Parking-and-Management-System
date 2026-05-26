@@ -1,0 +1,41 @@
+<div class="choose-vehicle-wrapper">
+  <div class="section-header">
+    <button class="btn-back" (click)="goBack()">
+      <i class="bi bi-arrow-left"></i>
+    </button>
+    <h2 class="section-title">Choose <span class="highlight">Vehicle</span></h2>
+  </div>
+
+  <div class="vehicle-list">
+    @for (vehicle of vehicles$|async; track vehicle.id) {
+    <div
+      class="vehicle-card"
+      [class.selected-card]="selectedVehicleId === vehicle.id"
+      (click)="selectVehicle(vehicle)"
+    >
+      <div class="card-row">
+        <div class="card-left">
+          <p class="vehicle-name">{{ vehicle.name }}</p>
+          <p class="vehicle-model">{{ vehicle.model }}</p>
+        </div>
+        <div class="card-right">
+          <p class="vehicle-plate">{{ vehicle.plateNumber }}</p>
+          @if (vehicle.isPrimary) {
+          <span class="primary-badge">Primary</span>
+          }
+        </div>
+      </div>
+    </div>
+    }
+  </div>
+
+  <div class="confirm-wrapper">
+    <button
+      class="confirm-btn"
+      (click)="onConfirm()"
+      [disabled]="!selectedVehicleId"
+    >
+      Confirm
+    </button>
+  </div>
+</div>

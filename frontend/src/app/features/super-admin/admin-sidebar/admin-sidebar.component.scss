@@ -1,0 +1,19 @@
+:host {
+  position: relative;
+  z-index: 1;
+}
+
+.btn-sidebar {
+  width: 100%;
+  text-align: left;
+  color: white;
+  border: none;
+  background: transparent;
+  padding: 12px 20px;
+  transition: 0.3s;
+
+  &:hover {
+    color: #000 !important;      /* Text turns black for contrast */
+    background-color: #ffc107 !important; /* Your Yellow */
+  }
+}

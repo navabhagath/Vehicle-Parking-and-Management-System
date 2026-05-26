@@ -1,0 +1,72 @@
+<div *ngIf="isLoading" class="text-center py-5">
+  <div class="spinner-border text-primary"></div>
+</div>
+
+<div *ngIf="!isLoading" class="p-3">
+
+  <!-- Location Banner -->
+  <div class="text-black rounded p-3 mb-4"
+    style="background: #FFDF66;">
+    <small class="fw-semibold">Currently Managing</small>
+    <h5 class="fw-bold mb-1">{{ location.locationName }}</h5>
+    <small class="fw-semibold">
+      {{ location.operationalHours.start }} - {{ location.operationalHours.end }}
+    </small>
+  </div>
+
+  <!-- Slot Summary -->
+  <div class="border rounded p-3 mb-4">
+    <h6 class="fw-bold mb-3" >Slot Summary</h6>
+    <div class="d-flex align-items-center ">
+      <div *ngFor="let item of menuItems; let last = last" class="flex-fill me-3 d-flex align-items-center justify-content-center p-3" [class.border-end]="!last">
+        <i [class]=" 'bi ' + item.icon + ' fs-4 ' + item.Color "></i>
+        <div>
+          <small class="text-muted d-block ps-3 mt-2 "> {{ item.label }} </small>
+          @if(item.key === 'total'){
+            <strong class="fs-5 ps-3"> {{ slotSummary.total }}</strong>
+          }@else if (item.key === 'occupied') {
+            <strong class="fs-5 ps-3" >{{slotSummary.occupied}}</strong>
+          }@else {
+            <strong class="fs-5 ps-3"> {{ slotSummary.free }} </strong>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Current Occupancy Pie -->
+  <div class="border rounded p-3 mb-4">
+    <h6 class="fw-bold mb-3">Current Occupancy</h6>
+    <div class="d-flex justify-content-center">
+
+      <div  style="width: 250px; height: 250px;">
+        <app-occupancy-pie-chart></app-occupancy-pie-chart>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Recent Parking -->
+  <div class="border rounded p-3">
+    <h6 class="fw-bold mb-3">Recent Parking</h6>
+
+    <div *ngIf="recentParking.length === 0" class="text-center text-muted py-3">
+      No recent parking entries
+    </div>
+
+    <div *ngFor="let entry of recentParking"
+      class="d-flex justify-content-between  border-bottom py-2">
+      <div>
+        <strong style="font-size:14px;">{{ entry.plateNumber }}</strong>
+        <small class="text-muted d-block">{{ entry.customerName }}</small>
+      </div>
+      <div class="text-end">
+        <span class="badge"
+          [ngClass]="entry.vehicleType === 'Car' ? 'bg-light-blue text-black' : 'bg-navy-black'">
+          {{ entry.vehicleType }}
+        </span>
+        <small class="text-muted d-block">{{ entry.checkInTime }}</small>
+      </div>
+    </div>
+  </div>
+</div>

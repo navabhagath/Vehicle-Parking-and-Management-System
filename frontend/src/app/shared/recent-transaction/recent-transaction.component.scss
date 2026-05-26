@@ -1,0 +1,82 @@
+// src/app/customer/recent-transactions/recent-transaction.component.scss
+ 
+.transactions-wrapper {
+  max-width: 620px;
+  margin: 0 auto;
+}
+ 
+.transaction-card {
+  background: #f9f9fb;
+  border: 1px solid #eee;
+  transition: background 0.15s ease;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+ 
+  &:hover {
+    background: #f1f1f5;
+  }
+ 
+  @media (min-width: 768px) {
+    flex-wrap: nowrap;
+ 
+    .txn-badge  { min-width: 100px; text-align: center; }
+    .txn-amount { min-width: 120px; text-align: right; }
+    .txn-status { min-width: 80px;  text-align: center; }
+    .txn-date   { min-width: 180px; text-align: right; }
+  }
+}
+ 
+// ── Type Badges ──
+.badge-recharge {
+  background-color: #d4edda;
+  color: #155724;
+}
+ 
+.badge-deduct {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+.badge-withdrawal {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+ 
+.badge-lock {
+  background-color: #fff3cd;
+  color: #856404;
+}
+ 
+.badge-recieved{
+  background-color: #d4edda;
+  color: #155724;
+}
+ 
+.text-warning-dark {
+  color: #856404;
+}
+ 
+.pagination {
+  .page-link {
+    color: var(--navy-black, #1e1e2f);
+    border-color: #dee2e6;
+    cursor: pointer;
+ 
+    &:hover {
+      background-color: var(--brand-yellow, #f5c542);
+      border-color: var(--brand-yellow, #f5c542);
+      color: #000;
+    }
+  }
+ 
+  .page-item.active .page-link {
+    background-color: var(--brand-yellow, #f5c542);
+    border-color: var(--brand-yellow, #f5c542);
+    color: #000;
+  }
+ 
+  .page-item.disabled .page-link {
+    color: #b0b0b0;
+    cursor: not-allowed;
+  }
+}
+ 

@@ -1,0 +1,568 @@
+<!-- 
+
+<div class="container-fluid p-0">
+  <div class="row g-0">
+
+    <div class="col-md-2 bg-dark min-vh-100 position-sticky top-0 shadow-sm">
+      <app-sidebar></app-sidebar>
+    </div>
+
+ 
+    <div class="col-md-10 bg-light min-vh-100">
+      <div class="container-fluid py-4 px-4">
+
+        <div class="d-flex align-items-center mb-4">
+          <button class="btn btn-white border bg-white shadow-sm rounded-circle me-3 d-flex align-items-center justify-content-center"
+                  style="width: 42px; height: 42px;"
+                  (click)="goBack()">
+            <i class="bi bi-chevron-left"></i>
+          </button>
+          <div>
+            <div class="text-uppercase text-muted small fw-semibold mb-1" style="letter-spacing: 0.1em;">Vendor Profile</div>
+            <h4 class="fw-bold mb-1">Vendor Details</h4>
+            <p class="text-muted small mb-0">Viewing profile and location assets for <span class="fw-semibold text-dark">{{ vendor?.name || 'Vendor' }}</span></p>
+          </div>
+        </div>
+
+        <div *ngIf="isLoading" class="d-flex flex-column align-items-center justify-content-center py-5">
+          <div class="spinner-border text-primary"></div>
+          <p class="mt-3 text-muted">Fetching vendor data...</p>
+        </div>
+
+        <div *ngIf="!isLoading && vendor" class="row g-4">
+
+          <div class="col-lg-4">
+            <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+
+          
+              <div class="bg-primary bg-opacity-10" style="height: 80px;"></div>
+
+              <div class="card-body p-4 text-center" style="margin-top: -50px;">
+                <div class="mx-auto bg-white rounded-circle d-flex align-items-center justify-content-center shadow-sm mb-3 border"
+                     style="width: 90px; height: 90px;">
+                  <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center fw-bold"
+                       style="width: 78px; height: 78px; font-size: 2rem;">
+                    {{ vendor.name.charAt(0).toUpperCase() }}
+                  </div>
+                </div>
+                <h5 class="fw-bold mb-1">{{ vendor.name }}</h5>
+                <span class="badge bg-light text-dark border rounded-pill px-3 py-2 mb-3">
+                  <i class="bi bi-hash"></i>{{ vendor.vendorId }}
+                </span>
+
+                <hr class="my-3">
+
+             
+                <div class="text-start">
+                  <div class="d-flex align-items-center mb-3 p-2 rounded-3" style="background-color: #f8f9fa;">
+                    <div class="d-flex align-items-center justify-content-center rounded-3 bg-primary bg-opacity-10 text-primary me-3"
+                         style="width: 36px; height: 36px;">
+                      <i class="bi bi-envelope-fill"></i>
+                    </div>
+                    <div class="flex-grow-1" style="min-width: 0;">
+                      <small class="text-muted d-block" style="font-size: 11px;">EMAIL</small>
+                      <span class="fw-semibold text-truncate d-block">{{ vendor.email || 'N/A' }}</span>
+                    </div>
+                  </div>
+
+                  <div class="d-flex align-items-center mb-3 p-2 rounded-3" style="background-color: #f8f9fa;">
+                    <div class="d-flex align-items-center justify-content-center rounded-3 bg-success bg-opacity-10 text-success me-3"
+                         style="width: 36px; height: 36px;">
+                      <i class="bi bi-telephone-fill"></i>
+                    </div>
+                    <div>
+                      <small class="text-muted d-block" style="font-size: 11px;">PHONE</small>
+                      <span class="fw-semibold">{{ vendor.phone }}</span>
+                    </div>
+                  </div>
+
+                  <div class="d-flex align-items-center p-2 rounded-3" style="background-color: #f8f9fa;">
+                    <div class="d-flex align-items-center justify-content-center rounded-3 bg-warning bg-opacity-10 text-warning me-3"
+                         style="width: 36px; height: 36px;">
+                      <i class="bi bi-calendar-event-fill"></i>
+                    </div>
+                    <div>
+                      <small class="text-muted d-block" style="font-size: 11px;">MEMBER SINCE</small>
+                      <span class="fw-semibold">{{ vendor.createdAt | date:'longDate' }}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+      
+          <div class="col-lg-8">
+
+        
+            <div class="card border-0 shadow-sm rounded-4 mb-4 overflow-hidden">
+              <div class="card-header bg-white border-bottom py-3 px-4 d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center gap-2">
+                  <div class="d-flex align-items-center justify-content-center rounded-3 bg-danger bg-opacity-10 text-danger"
+                       style="width: 36px; height: 36px;">
+                    <i class="bi bi-geo-alt-fill"></i>
+                  </div>
+                  <div>
+                    <h6 class="fw-bold mb-0">Parking Asset</h6>
+                    <small class="text-muted">Location & operational details</small>
+                  </div>
+                </div>
+                <span *ngIf="vendor.locationDetails.length" class="badge rounded-pill px-3 py-2 fw-semibold d-inline-flex align-items-center gap-1"
+                      [ngClass]="{
+                        'bg-success-subtle text-success border border-success': vendor.locationDetails[0].approvalStatus === 'APPROVED',
+                        'bg-warning-subtle text-warning-emphasis border border-warning': vendor.locationDetails[0].approvalStatus === 'PENDING',
+                        'bg-danger-subtle text-danger border border-danger': vendor.locationDetails[0].approvalStatus === 'REJECTED'
+                      }">
+                  <span class="d-inline-block rounded-circle"
+                        style="width: 6px; height: 6px;"
+                        [ngClass]="{
+                          'bg-success': vendor.locationDetails[0].approvalStatus === 'APPROVED',
+                          'bg-warning': vendor.locationDetails[0].approvalStatus === 'PENDING',
+                          'bg-danger': vendor.locationDetails[0].approvalStatus === 'REJECTED'
+                        }"></span>
+                  {{ vendor.locationDetails[0].approvalStatus }}
+                </span>
+              </div>
+
+              <div class="card-body p-4" *ngIf="vendor.locationDetails.length; else noLoc">
+
+                <div class="mb-4 pb-3 border-bottom">
+                  <small class="text-uppercase text-muted fw-semibold" style="letter-spacing: 0.08em; font-size: 11px;">Location Name</small>
+                  <h4 class="fw-bold mb-0 mt-1">
+                    <i class="bi bi-shop text-primary me-2"></i>{{ vendor.locationDetails[0].locationName }}
+                  </h4>
+                </div>
+
+                <div class="row g-3 mb-4">
+                  <div class="col-md-6">
+                    <div class="p-3 rounded-3 h-100 border" style="background-color: #f8f9fa;">
+                      <div class="d-flex align-items-center justify-content-between mb-2">
+                        <small class="text-uppercase text-muted fw-semibold" style="letter-spacing: 0.08em; font-size: 11px;">Two Wheeler Rate</small>
+                        <i class="bi bi-bicycle text-primary"></i>
+                      </div>
+                      <h4 class="fw-bold text-success mb-0">₹{{ vendor.locationDetails[0].bikePrice }}
+                        <small class="text-muted fw-normal fs-6">/ interval</small>
+                      </h4>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="p-3 rounded-3 h-100 border" style="background-color: #f8f9fa;">
+                      <div class="d-flex align-items-center justify-content-between mb-2">
+                        <small class="text-uppercase text-muted fw-semibold" style="letter-spacing: 0.08em; font-size: 11px;">Four Wheeler Rate</small>
+                        <i class="bi bi-car-front-fill text-primary"></i>
+                      </div>
+                      <h4 class="fw-bold text-success mb-0">₹{{ vendor.locationDetails[0].carPrice }}
+                        <small class="text-muted fw-normal fs-6">/ interval</small>
+                      </h4>
+                    </div>
+                  </div>
+                </div>
+
+               
+                <div class="row g-3 mb-4">
+                  <div class="col-md-6">
+                    <div class="p-3 rounded-3 h-100 border" style="background-color: #f8f9fa;">
+                      <small class="text-uppercase text-muted fw-semibold d-block mb-2" style="letter-spacing: 0.08em; font-size: 11px;">
+                        <i class="bi bi-grid-3x3-gap-fill me-1"></i>Vehicle Capacity
+                      </small>
+                      <div class="d-flex justify-content-between mb-2">
+                        <span class="text-muted small">Two Wheeler</span>
+                        <span class="fw-bold">{{ vendor.locationDetails[0].capacity.twoWheeler }} <small class="text-muted">slots</small></span>
+                      </div>
+                      <div class="d-flex justify-content-between">
+                        <span class="text-muted small">Four Wheeler</span>
+                        <span class="fw-bold">{{ vendor.locationDetails[0].capacity.fourWheeler }} <small class="text-muted">slots</small></span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="p-3 rounded-3 h-100 border" style="background-color: #f8f9fa;">
+                      <small class="text-uppercase text-muted fw-semibold d-block mb-2" style="letter-spacing: 0.08em; font-size: 11px;">
+                        <i class="bi bi-clock-fill me-1"></i>Operating Hours
+                      </small>
+                      <h5 class="fw-bold mb-0">
+                        {{ vendor.locationDetails[0].operationalHours.start }}
+                        <small class="text-muted fw-normal mx-1">to</small>
+                        {{ vendor.locationDetails[0].operationalHours.end }}
+                      </h5>
+                    </div>
+                  </div>
+                </div>
+
+             
+                <div class="row g-3 mb-4" *ngIf="vendor.locationDetails[0].documents as docs">
+                  <div class="col-md-6">
+                    <div class="p-3 rounded-3 border d-flex align-items-center justify-content-between" style="background-color: #fff5f5;">
+                      <div class="d-flex align-items-center gap-3">
+                        <div class="d-flex align-items-center justify-content-center rounded-3 bg-danger bg-opacity-10 text-danger"
+                             style="width: 42px; height: 42px;">
+                          <i class="bi bi-file-earmark-pdf-fill fs-5"></i>
+                        </div>
+                        <div>
+                          <small class="text-uppercase text-muted fw-semibold d-block" style="letter-spacing: 0.08em; font-size: 11px;">Licence</small>
+                          <span class="fw-semibold">GST Document</span>
+                        </div>
+                      </div>
+                      <a [href]="docs.gstDocument"
+                         target="_blank"
+                         rel="noopener noreferrer"
+                         class="btn btn-sm btn-danger rounded-pill px-3">
+                        <i class="bi bi-eye-fill me-1"></i> View
+                      </a>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="pt-3 border-top">
+                  <small class="text-uppercase text-muted fw-semibold d-block mb-3" style="letter-spacing: 0.08em; font-size: 11px;">
+                    <i class="bi bi-stars me-1"></i>On-Site Amenities
+                  </small>
+                  <div class="d-flex flex-wrap gap-2">
+                    <span *ngFor="let amenity of vendor.locationDetails[0]?.amenities"
+                          class="badge bg-white text-dark border rounded-pill px-3 py-2 fw-normal d-inline-flex align-items-center gap-1">
+                      <i class="bi bi-patch-check-fill text-primary"></i> {{ amenity }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <ng-template #noLoc>
+                <div class="card-body d-flex flex-column align-items-center justify-content-center text-center py-5">
+                  <div class="d-flex align-items-center justify-content-center rounded-circle bg-light mb-3"
+                       style="width: 70px; height: 70px;">
+                    <i class="bi bi-building-exclamation fs-2 text-muted"></i>
+                  </div>
+                  <h6 class="fw-semibold mb-1">No Parking Location Yet</h6>
+                  <p class="text-muted small mb-0">This vendor has not registered a parking location.</p>
+                </div>
+              </ng-template>
+            </div>
+
+          
+            <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+              <div class="card-header bg-white border-bottom py-3 px-4">
+                <div class="d-flex align-items-center gap-2">
+                  <div class="d-flex align-items-center justify-content-center rounded-3 bg-primary bg-opacity-10 text-primary"
+                       style="width: 36px; height: 36px;">
+                    <i class="bi bi-shield-check"></i>
+                  </div>
+                  <div>
+                    <h6 class="fw-bold mb-0">Management Actions</h6>
+                    <small class="text-muted">Approve or decline this vendor's registration</small>
+                  </div>
+                </div>
+              </div>
+              <div class="card-body p-4" *ngIf="vendor.locationDetails.length">
+                <div class="d-flex flex-wrap gap-2">
+                  <button class="btn btn-success shadow-sm rounded-pill px-4"
+                          [disabled]="vendor.locationDetails[0].approvalStatus === 'APPROVED'"
+                          (click)="changeStatus('APPROVED')">
+                    <i class="bi bi-check-circle-fill me-1"></i> Approve Vendor
+                  </button>
+
+                  <button class="btn btn-outline-danger shadow-sm rounded-pill px-4"
+                          [disabled]="vendor.locationDetails[0].approvalStatus === 'REJECTED'"
+                          (click)="changeStatus('REJECTED')">
+                    <i class="bi bi-x-circle-fill me-1"></i> Decline Vendor
+                  </button>
+                </div>
+                <p class="text-muted small mt-3 mb-0">
+                  <i class="bi bi-info-circle me-1"></i>
+                  Current status: <span class="fw-semibold text-dark">{{ vendor.locationDetails[0].approvalStatus }}</span>
+                </p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> -->
+
+<div class="container-fluid p-0">
+  <div class="row g-0">
+
+    <!-- Sidebar -->
+    <div class="col-md-2 bg-dark min-vh-100 position-sticky top-0 shadow-sm">
+      <app-sidebar></app-sidebar>
+    </div>
+
+    <!-- Main Content -->
+    <div class="col-md-10 bg-light min-vh-100">
+      <div class="container-fluid py-4 px-4">
+
+        <!-- Header -->
+        <div class="d-flex align-items-center mb-4">
+          <button class="btn btn-white border bg-white shadow-sm rounded-circle me-3 d-flex align-items-center justify-content-center"
+                  style="width: 42px; height: 42px;"
+                  (click)="goBack()">
+            <i class="bi bi-chevron-left"></i>
+          </button>
+          <div>
+            <div class="text-uppercase text-muted small fw-semibold mb-1" style="letter-spacing: 0.1em;">Vendor Profile</div>
+            <h4 class="fw-bold mb-1">Vendor Details</h4>
+            <p class="text-muted small mb-0">Viewing profile and location assets for <span class="fw-semibold text-dark">{{ vendor?.name || 'Vendor' }}</span></p>
+          </div>
+        </div>
+
+        <!-- Loading state -->
+        <div *ngIf="isLoading" class="d-flex flex-column align-items-center justify-content-center py-5">
+          <div class="spinner-border text-primary"></div>
+          <p class="mt-3 text-muted">Fetching vendor data...</p>
+        </div>
+
+        <div *ngIf="!isLoading && vendor" class="row g-4">
+
+          <!-- LEFT COLUMN: Vendor Profile Card -->
+          <div class="col-lg-4">
+            <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+
+              <!-- Banner -->
+              <div class="bg-primary bg-opacity-10" style="height: 80px;"></div>
+
+              <div class="card-body p-4 text-center" style="margin-top: -50px;">
+                <div class="mx-auto bg-white rounded-circle d-flex align-items-center justify-content-center shadow-sm mb-3 border"
+                     style="width: 90px; height: 90px;">
+                  <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center fw-bold"
+                       style="width: 78px; height: 78px; font-size: 2rem;">
+                    {{ vendor.name.charAt(0).toUpperCase() }}
+                  </div>
+                </div>
+                <h5 class="fw-bold mb-1">{{ vendor.name }}</h5>
+                <span class="badge bg-light text-dark border rounded-pill px-3 py-2 mb-3">
+                  <i class="bi bi-hash"></i>{{ vendor.vendorId }}
+                </span>
+
+                <hr class="my-3">
+
+                <!-- Contact info -->
+                <div class="text-start">
+                  <div class="d-flex align-items-center mb-3 p-2 rounded-3" style="background-color: #f8f9fa;">
+                    <div class="d-flex align-items-center justify-content-center rounded-3 bg-primary bg-opacity-10 text-primary me-3"
+                         style="width: 36px; height: 36px;">
+                      <i class="bi bi-envelope-fill"></i>
+                    </div>
+                    <div class="flex-grow-1" style="min-width: 0;">
+                      <small class="text-muted d-block" style="font-size: 11px;">EMAIL</small>
+                      <span class="fw-semibold text-truncate d-block">{{ vendor.email || 'N/A' }}</span>
+                    </div>
+                  </div>
+
+                  <div class="d-flex align-items-center mb-3 p-2 rounded-3" style="background-color: #f8f9fa;">
+                    <div class="d-flex align-items-center justify-content-center rounded-3 bg-success bg-opacity-10 text-success me-3"
+                         style="width: 36px; height: 36px;">
+                      <i class="bi bi-telephone-fill"></i>
+                    </div>
+                    <div>
+                      <small class="text-muted d-block" style="font-size: 11px;">PHONE</small>
+                      <span class="fw-semibold">{{ vendor.phone }}</span>
+                    </div>
+                  </div>
+
+                  <div class="d-flex align-items-center p-2 rounded-3" style="background-color: #f8f9fa;">
+                    <div class="d-flex align-items-center justify-content-center rounded-3 bg-warning bg-opacity-10 text-warning me-3"
+                         style="width: 36px; height: 36px;">
+                      <i class="bi bi-calendar-event-fill"></i>
+                    </div>
+                    <div>
+                      <small class="text-muted d-block" style="font-size: 11px;">MEMBER SINCE</small>
+                      <span class="fw-semibold">{{ vendor.createdAt | date:'longDate' }}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- RIGHT COLUMN: Parking Asset + Actions -->
+          <div class="col-lg-8">
+
+            <!-- Parking Asset Card -->
+            <div class="card border-0 shadow-sm rounded-4 mb-4 overflow-hidden">
+              <div class="card-header bg-white border-bottom py-3 px-4 d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center gap-2">
+                  <div class="d-flex align-items-center justify-content-center rounded-3 bg-danger bg-opacity-10 text-danger"
+                       style="width: 36px; height: 36px;">
+                    <i class="bi bi-geo-alt-fill"></i>
+                  </div>
+                  <div>
+                    <h6 class="fw-bold mb-0">Parking Asset</h6>
+                    <small class="text-muted">Location & operational details</small>
+                  </div>
+                </div>
+                <span *ngIf="location" class="badge rounded-pill px-3 py-2 fw-semibold d-inline-flex align-items-center gap-1"
+                      [ngClass]="{
+                        'bg-success-subtle text-success border border-success': location.approvalStatus === 'APPROVED',
+                        'bg-warning-subtle text-warning-emphasis border border-warning': location.approvalStatus === 'PENDING',
+                        'bg-danger-subtle text-danger border border-danger': location.approvalStatus === 'REJECTED'
+                      }">
+                  <span class="d-inline-block rounded-circle"
+                        style="width: 6px; height: 6px;"
+                        [ngClass]="{
+                          'bg-success': location.approvalStatus === 'APPROVED',
+                          'bg-warning': location.approvalStatus === 'PENDING',
+                          'bg-danger': location.approvalStatus === 'REJECTED'
+                        }"></span>
+                  {{ location.approvalStatus }}
+                </span>
+              </div>
+
+              <div class="card-body p-4" *ngIf="location; else noLoc">
+
+                <!-- Location name as hero -->
+                <div class="mb-4 pb-3 border-bottom">
+                  <small class="text-uppercase text-muted fw-semibold" style="letter-spacing: 0.08em; font-size: 11px;">Location Name</small>
+                  <h4 class="fw-bold mb-0 mt-1">
+                    <i class="bi bi-shop text-primary me-2"></i>{{ location.locationName }}
+                  </h4>
+                </div>
+
+                <!-- Pricing block -->
+                <div class="row g-3 mb-4">
+                  <div class="col-md-6">
+                    <div class="p-3 rounded-3 h-100 border" style="background-color: #f8f9fa;">
+                      <div class="d-flex align-items-center justify-content-between mb-2">
+                        <small class="text-uppercase text-muted fw-semibold" style="letter-spacing: 0.08em; font-size: 11px;">Two Wheeler Rate</small>
+                        <i class="bi bi-bicycle text-primary"></i>
+                      </div>
+                      <h4 class="fw-bold text-success mb-0">₹{{ location.bikePrice }}
+                        <small class="text-muted fw-normal fs-6">/ interval</small>
+                      </h4>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="p-3 rounded-3 h-100 border" style="background-color: #f8f9fa;">
+                      <div class="d-flex align-items-center justify-content-between mb-2">
+                        <small class="text-uppercase text-muted fw-semibold" style="letter-spacing: 0.08em; font-size: 11px;">Four Wheeler Rate</small>
+                        <i class="bi bi-car-front-fill text-primary"></i>
+                      </div>
+                      <h4 class="fw-bold text-success mb-0">₹{{ location.carPrice }}
+                        <small class="text-muted fw-normal fs-6">/ interval</small>
+                      </h4>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Capacity & Hours -->
+                <div class="row g-3 mb-4">
+                  <div class="col-md-6">
+                    <div class="p-3 rounded-3 h-100 border" style="background-color: #f8f9fa;">
+                      <small class="text-uppercase text-muted fw-semibold d-block mb-2" style="letter-spacing: 0.08em; font-size: 11px;">
+                        <i class="bi bi-grid-3x3-gap-fill me-1"></i>Vehicle Capacity
+                      </small>
+                      <div class="d-flex justify-content-between mb-2">
+                        <span class="text-muted small">Two Wheeler</span>
+                        <span class="fw-bold">{{ location.capacity.twoWheeler }} <small class="text-muted">slots</small></span>
+                      </div>
+                      <div class="d-flex justify-content-between">
+                        <span class="text-muted small">Four Wheeler</span>
+                        <span class="fw-bold">{{ location.capacity.fourWheeler }} <small class="text-muted">slots</small></span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="p-3 rounded-3 h-100 border" style="background-color: #f8f9fa;">
+                      <small class="text-uppercase text-muted fw-semibold d-block mb-2" style="letter-spacing: 0.08em; font-size: 11px;">
+                        <i class="bi bi-clock-fill me-1"></i>Operating Hours
+                      </small>
+                      <h5 class="fw-bold mb-0">
+                        {{ location.operationalHours.start }}
+                        <small class="text-muted fw-normal mx-1">to</small>
+                        {{ location.operationalHours.end }}
+                      </h5>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Document -->
+                <div class="row g-3 mb-4" *ngIf="location.documents as docs">
+                  <div class="col-md-6">
+                    <div class="p-3 rounded-3 border d-flex align-items-center justify-content-between" style="background-color: #fff5f5;">
+                      <div class="d-flex align-items-center gap-3">
+                        <div class="d-flex align-items-center justify-content-center rounded-3 bg-danger bg-opacity-10 text-danger"
+                             style="width: 42px; height: 42px;">
+                          <i class="bi bi-file-earmark-pdf-fill fs-5"></i>
+                        </div>
+                        <div>
+                          <small class="text-uppercase text-muted fw-semibold d-block" style="letter-spacing: 0.08em; font-size: 11px;">Licence</small>
+                          <span class="fw-semibold">GST Document</span>
+                        </div>
+                      </div>
+                      <a [href]="docs.gstDocument"
+                         target="_blank"
+                         rel="noopener noreferrer"
+                         class="btn btn-sm btn-danger rounded-pill px-3">
+                        <i class="bi bi-eye-fill me-1"></i> View
+                      </a>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Amenities -->
+                <div class="pt-3 border-top">
+                  <small class="text-uppercase text-muted fw-semibold d-block mb-3" style="letter-spacing: 0.08em; font-size: 11px;">
+                    <i class="bi bi-stars me-1"></i>On-Site Amenities
+                  </small>
+                  <div class="d-flex flex-wrap gap-2">
+                    <span *ngFor="let amenity of location.amenities"
+                          class="badge bg-white text-dark border rounded-pill px-3 py-2 fw-normal d-inline-flex align-items-center gap-1">
+                      <i class="bi bi-patch-check-fill text-primary"></i> {{ amenity }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <ng-template #noLoc>
+                <div class="card-body d-flex flex-column align-items-center justify-content-center text-center py-5">
+                  <div class="d-flex align-items-center justify-content-center rounded-circle bg-light mb-3"
+                       style="width: 70px; height: 70px;">
+                    <i class="bi bi-building-exclamation fs-2 text-muted"></i>
+                  </div>
+                  <h6 class="fw-semibold mb-1">No Parking Location Yet</h6>
+                  <p class="text-muted small mb-0">This vendor has not registered a parking location.</p>
+                </div>
+              </ng-template>
+            </div>
+
+            <!-- Management Actions Card -->
+            <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+              <div class="card-header bg-white border-bottom py-3 px-4">
+                <div class="d-flex align-items-center gap-2">
+                  <div class="d-flex align-items-center justify-content-center rounded-3 bg-primary bg-opacity-10 text-primary"
+                       style="width: 36px; height: 36px;">
+                    <i class="bi bi-shield-check"></i>
+                  </div>
+                  <div>
+                    <h6 class="fw-bold mb-0">Management Actions</h6>
+                    <small class="text-muted">Approve or decline this location's registration</small>
+                  </div>
+                </div>
+              </div>
+              <div class="card-body p-4" *ngIf="location">
+                <div class="d-flex flex-wrap gap-2">
+                  <button class="btn btn-success shadow-sm rounded-pill px-4"
+                          [disabled]="location.approvalStatus === 'APPROVED'"
+                          (click)="changeStatus('APPROVED')">
+                    <i class="bi bi-check-circle-fill me-1"></i> Approve Location
+                  </button>
+
+                  <button class="btn btn-outline-danger shadow-sm rounded-pill px-4"
+                          [disabled]="location.approvalStatus === 'REJECTED'"
+                          (click)="changeStatus('REJECTED')">
+                    <i class="bi bi-x-circle-fill me-1"></i> Decline Location
+                  </button>
+                </div>
+                <p class="text-muted small mt-3 mb-0">
+                  <i class="bi bi-info-circle me-1"></i>
+                  Current status: <span class="fw-semibold text-dark">{{ location.approvalStatus }}</span>
+                </p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

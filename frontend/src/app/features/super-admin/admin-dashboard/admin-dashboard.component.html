@@ -1,0 +1,111 @@
+
+
+<div class="container-fluid bg-light min-vh-100">
+  <div class="row">
+   
+    <div class="col-md-2 p-0 bg-white shadow-sm" style="min-height: 100vh;">
+      <app-sidebar></app-sidebar>
+    </div>
+
+    <div class="col-md-10 px-4 py-4">
+
+   
+      <div class="d-flex justify-content-between align-items-center pb-3 mb-4 border-bottom">
+        <div>
+          <div class="text-uppercase text-muted small fw-semibold mb-1" style="letter-spacing: 0.1em;">Overview</div>
+          <h1 class="h2 fw-bold mb-0">Dashboard</h1>
+        </div>
+       
+      </div>
+
+    
+      <div class="row g-3 mb-4">
+        <div class="col-md-6">
+          <div class="card shadow-sm border-0 h-100">
+            <div class="card-body p-4">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <span class="text-muted small fw-semibold">Total Vendors</span>
+                <div class="d-flex align-items-center justify-content-center rounded-3 bg-warning bg-opacity-10 text-warning"
+                     style="width: 40px; height: 40px;">
+                  <i class="bi bi-people-fill"></i>
+                </div>
+              </div>
+              <h2 class="display-5 fw-bold mb-0">{{ totalVendors }}</h2>
+              <hr class="my-3">
+              <div class="d-flex align-items-center gap-2">
+                <span class="d-inline-block rounded-circle bg-warning" style="width: 6px; height: 6px;"></span>
+                <small class="text-muted">Active across all regions</small>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="card shadow-sm border-0 h-100">
+            <div class="card-body p-4">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <span class="text-muted small fw-semibold">Total Revenue</span>
+                <div class="d-flex align-items-center justify-content-center rounded-3 bg-success bg-opacity-10 text-success"
+                     style="width: 40px; height: 40px;">
+                  <i class="bi bi-currency-rupee"></i>
+                </div>
+              </div>
+              <h2 class="display-5 fw-bold mb-0">{{ totalRevenue | currency:'INR':'symbol':'1.0-0' }}</h2>
+              <hr class="my-3">
+              <div class="d-flex align-items-center gap-2">
+                <span class="d-inline-block rounded-circle bg-success" style="width: 6px; height: 6px;"></span>
+                <small class="text-muted">Cumulative gross revenue</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card shadow-sm border-0 mb-4">
+        <div class="card-body p-4">
+          <div class="d-flex justify-content-between align-items-start mb-4">
+            <div>
+              <h5 class="fw-bold mb-1">Monthly Revenue Analysis</h5>
+              <p class="text-muted small mb-0">Revenue performance broken down month over month</p>
+            </div>
+            <span class="badge rounded-pill bg-warning bg-opacity-10 text-warning fw-semibold px-3 py-2">REVENUE</span>
+          </div>
+          <div style="height: 300px;">
+            <canvas #revenueChart></canvas>
+          </div>
+        </div>
+      </div>
+
+      <div class="card shadow-sm border-0 mb-4">
+        <div class="card-body p-4">
+          <div class="d-flex justify-content-between align-items-start mb-4">
+            <div>
+              <h5 class="fw-bold mb-1">Top Performing Vendors</h5>
+              <p class="text-muted small mb-0">Based on total revenue generated across all locations</p>
+            </div>
+            <span class="badge rounded-pill bg-primary bg-opacity-10 text-primary fw-semibold px-3 py-2">VENDORS</span>
+          </div>
+          <div style="height: 350px;">
+            <canvas #topVendorsChart></canvas>
+          </div>
+        </div>
+      </div>
+
+      <div class="card shadow-sm border-0 mb-4">
+        <div class="card-body p-4">
+          <div class="d-flex justify-content-between align-items-start mb-4">
+            <div>
+              <h5 class="fw-bold mb-1">Vendor Growth Velocity</h5>
+              <p class="text-muted small mb-0">Rate of vendor acquisition and engagement over time</p>
+            </div>
+            <span class="badge rounded-pill bg-success bg-opacity-10 text-success fw-semibold px-3 py-2">GROWTH</span>
+          </div>
+          <div style="height: 320px;">
+            <canvas #growthChart></canvas>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

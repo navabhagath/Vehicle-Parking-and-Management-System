@@ -1,0 +1,106 @@
+<div class="gate-wrapper">
+ 
+  <div class="gate-header">
+    <h2 class="gate-title">Gate <span class="highlight">Operations</span></h2>
+    @if (location) {
+      <p class="location-name">
+        <i class="bi bi-geo-alt-fill"></i> {{ location.locationName }}
+      </p>
+    }
+  </div>
+ 
+  <div class="search-section">
+    <div class="search-box">
+      <i class="bi bi-search search-icon"></i>
+      <input
+        type="text"
+        class="search-input"
+        placeholder="Enter Booking ID"
+        [(ngModel)]="searchId"
+        (keyup.enter)="searchBooking()"
+      />
+      @if (searchId) {
+        <button class="clear-btn" (click)="clearSearch()">
+          <i class="bi bi-x-circle"></i>
+        </button>
+      }
+    </div>
+    <button class="search-btn" (click)="searchBooking()" [disabled]="!searchId.trim()">
+      Search
+    </button>
+  </div>
+ 
+  @if (error) {
+    <div class="alert alert-error">
+      <i class="bi bi-exclamation-circle"></i> {{ error }}
+    </div>
+  }
+ 
+  @if (message) {
+    <div class="alert alert-success">
+      <i class="bi bi-check-circle"></i> {{ message }}
+    </div>
+  }
+ 
+  @if (booking) {
+    <div class="booking-card">
+      <div class="booking-header">
+        <span class="booking-id">{{ booking.id }}</span>
+        <span
+          class="status-badge"
+          [class.confirmed]="booking.status === 'CONFIRMED'"
+          [class.active]="booking.status === 'ACTIVE'"
+          [class.completed]="booking.status === 'COMPLETED'">
+          {{ booking.status }}
+        </span>
+      </div>
+ 
+      <div class="booking-details">
+        <div class="detail-row">
+          <span class="detail-label">Vehicle Plate-Number</span>
+          <span class="detail-value">{{ booking.plateNumber}}</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Scheduled Start</span>
+          <span class="detail-value">{{ booking.scheduledStartTime | date:'short' }}</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Scheduled End</span>
+          <span class="detail-value">{{ booking.scheduledEndTime | date:'short' }}</span>
+        </div>
+        @if (booking.actualCheckIn) {
+          <div class="detail-row">
+            <span class="detail-label">Checked In At</span>
+            <span class="detail-value">{{ booking.actualCheckIn | date:'short' }}</span>
+          </div>
+        }
+        <!-- @if (booking.status === 'ACTIVE') {
+          <div class="detail-row amount-row">
+            <span class="detail-label">Amount Due</span>
+            <span class="detail-value amount">₹{{ finalAmount }}</span>
+          </div>
+        } -->
+      </div>
+ 
+      <div class="action-section">
+        @if (booking.status === 'CONFIRMED') {
+          <button class="action-btn checkin-btn" (click)="onCheckIn()">
+            <i class="bi bi-box-arrow-in-right"></i> Check In
+          </button>
+        }
+        @if (booking.status === 'ACTIVE') {
+          <button class="action-btn checkout-btn" (click)="onCheckOut()">
+            <i class="bi bi-box-arrow-right"></i> Check Out — ₹{{ finalAmount }}
+          </button>
+        }
+        @if (booking.status === 'COMPLETED') {
+          <div class="completed-msg">
+            <i class="bi bi-check-circle-fill"></i> Already Checked Out
+          </div>
+        }
+      </div>
+    </div>
+  }
+ 
+</div>
+ 

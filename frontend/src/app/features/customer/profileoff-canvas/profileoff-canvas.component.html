@@ -1,0 +1,72 @@
+  <div
+    class="offcanvas offcanvas-end border-0 shadow-lg"
+    tabindex="-1"
+    id="profileOffcanvas"
+    aria-labelledby="profileOffcanvasLabel"
+    #offcanvasEl>
+    <div class="offcanvas-header align-items-center pb-0 pt-4 px-4">
+      <div class="d-flex align-items-center gap-3">
+        <img
+          [src]="profileImg"
+          alt="Profile"
+          class="rounded-circle"
+          width="48"
+          height="48"
+        />
+        <h5 class="offcanvas-title fw-semibold mb-0" id="profileOffcanvasLabel">
+          {{ user?.name }}
+        </h5>
+      </div>
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="offcanvas"
+        aria-label="Close">
+      </button>
+    </div>
+
+    <!-- ── Body ── -->
+    <div class="offcanvas-body d-flex flex-column px-4 pt-3">
+
+      <!-- Reused Wallet Component -->
+      <app-wallet [add]="true"></app-wallet>
+
+      <nav class="nav-links mt-4 d-flex flex-column gap-2">
+        <a
+          routerLink="/customer/dashboard"
+          class="nav-link-item"
+          data-bs-dismiss="offcanvas">
+          Dashboard
+        </a>
+        <a
+          routerLink="/customer/recentTransactions"
+          class="nav-link-item"
+          data-bs-dismiss="offcanvas">
+          Recent Activity
+        </a>
+        <a
+          routerLink="/customer/support"
+          class="nav-link-item"
+          data-bs-dismiss="offcanvas">
+          Customer Support
+        </a>
+        <a
+          routerLink="/customer/helpcenter"
+          class="nav-link-item"
+          data-bs-dismiss="offcanvas">
+          Help Center
+        </a>
+      </nav>
+
+      <div class="flex-grow-1"></div>
+
+      <div class="py-2 bg-dark rounded-4 w-50 h-auto text-center">
+        <button
+          class="btn btn-dark rounded-pill  fw-semibold text-white"
+          (click)="signOut()">
+          Sign Out
+        </button>
+      </div>
+
+    </div>
+  </div>

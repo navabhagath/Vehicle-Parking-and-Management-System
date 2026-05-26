@@ -1,0 +1,91 @@
+.wallet-container {
+  max-width: 420px;
+  margin: 0 auto;
+}
+ 
+// ─── Mode Toggle ───
+ 
+.mode-toggle {
+  border: 2px solid #e0e0e0;
+  background: #f5f5f5;
+}
+ 
+.toggle-btn {
+  border: none;
+  background: transparent;
+  color: #888;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.25s ease;
+ 
+  &.active {
+    background: #FFDF66;
+    color: #2f2f2f;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  }
+ 
+  &:not(.active):hover {
+    background: rgba(0, 0, 0, 0.04);
+  }
+}
+ 
+// ─── Preset Buttons ───
+ 
+.preset-btn {
+  background: transparent;
+  border: 2px dashed #c0c0c0;
+  color: #2f2f2f;
+  cursor: pointer;
+  transition: all 0.2s ease;
+ 
+  &:hover {
+    border-color: #f5c542;
+    background: rgba(245, 197, 66, 0.06);
+  }
+ 
+  &.active {
+    border-style: solid;
+    border-color: #FFDF66;
+    background: #FFDF66;
+    color: #2f2f2f;
+  }
+}
+ 
+// ─── Custom Input ───
+ 
+.custom-input-wrapper {
+  border: 2px dashed #c0c0c0;
+  transition: border-color 0.2s ease;
+ 
+  &:focus-within {
+    border-color: #f5c542;
+    border-style: solid;
+  }
+ 
+  input {
+    background: transparent;
+ 
+    &::placeholder {
+      color: #b0b0b0;
+      font-size: 0.95rem;
+    }
+  }
+}
+ 
+// ─── Withdraw Button ───
+ 
+.btn-withdraw {
+  background: #dc3545;
+  border: none;
+  transition: background 0.2s ease;
+ 
+  &:hover:not(:disabled) {
+    background: #c82333;
+  }
+ 
+  &:disabled {
+    background: #e4a0a7;
+    cursor: not-allowed;
+  }
+}
+ 
