@@ -184,9 +184,60 @@ npm install
 
 ## Configuration
 
+### Environment Setup - Security Notice ⚠️
+
+**IMPORTANT**: The `.env` and `environment.ts` files contain sensitive credentials and are excluded from version control (added to `.gitignore`). These files have been removed from git history for security reasons.
+
+### Backend Environment Setup
+
+1. Copy the example file to create your `.env` file:
+
+```bash
+cd backend
+cp .env.example .env
+```
+
+2. Edit `backend/.env` with your actual credentials:
+
+```env
+PORT=4000
+NODE_ENV=development
+SECRET_KEY=your_secret_key_here
+
+CORS_ORIGIN=http://localhost:4200
+EMAIL_USER=your_email@gmail.com
+EMAIL_PASSWORD=your_app_password
+
+MONGO_URI=mongodb://localhost:27017/vehiclemanagement
+
+TWILIO_ACCOUNT_SID=your_twilio_account_sid
+TWILIO_AUTH_TOKEN=your_twilio_auth_token
+TWILIO_PHONE=+1234567890
+
+NODE_OPTIONS=--use-system-ca
+```
+
+### Frontend Environment Setup
+
+1. Copy the example file to create your `environment.ts`:
+
+```bash
+cd frontend/src/environments
+cp environment.ts.example environment.ts
+```
+
+2. Edit `frontend/src/environments/environment.ts`:
+
+```typescript
+export const environment = {
+  production: false,
+  apiUrl: "http://localhost:4000/api",
+};
+```
+
 ### Database Configuration
 
-Edit `backend/config/db.js` to configure your MongoDB connection:
+The database connection is configured in `backend/config/db.js` and uses the `MONGO_URI` from your `.env` file:
 
 ```javascript
 const mongoose = require("mongoose");
@@ -202,14 +253,18 @@ const connectDB = async () => {
 };
 ```
 
-### Environment Variables
+### Environment Variables Reference
 
-Create `.env` files in both backend directories with necessary configurations:
-
-- `MONGODB_URI`: MongoDB connection string
-- `JWT_SECRET`: Secret key for JWT token signing
 - `PORT`: Server port (default: 4000)
-- `SMTP_*`: Email service configuration
+- `NODE_ENV`: Environment mode (development/production/test)
+- `SECRET_KEY`: Secret key for JWT token signing
+- `MONGO_URI`: MongoDB connection string
+- `CORS_ORIGIN`: Frontend URL for CORS
+- `EMAIL_USER`: Email service username
+- `EMAIL_PASSWORD`: Email service password
+- `TWILIO_ACCOUNT_SID`: Twilio account SID for SMS
+- `TWILIO_AUTH_TOKEN`: Twilio auth token
+- `TWILIO_PHONE`: Twilio phone number for SMS
 
 ## Running the Application
 
@@ -322,6 +377,37 @@ Test files are located in `backend/test/` directory organized by module:
 - Booking statistics and trends
 - Vehicle usage analytics
 - Customer and vendor metrics
+
+## Security & Best Practices
+
+### Protecting Sensitive Information
+
+1. **Never commit `.env` files**: Always use `.env.example` templates
+2. **Git Credentials**: Use git credentials or SSH keys, never commit credentials
+3. **Sensitive Data Removed**: The `.env` file containing credentials has been removed from git history
+4. **Template Files**: Use `.env.example` and `environment.ts.example` as reference for your local setup
+
+### Security Headers
+
+The application uses Helmet.js to set secure HTTP headers:
+- Content Security Policy (CSP)
+- X-Frame-Options
+- X-Content-Type-Options
+- HSTS (HTTP Strict Transport Security)
+
+### Authentication
+
+- JWT-based authentication with expiring tokens
+- Bcrypt password hashing
+- OTP verification for sensitive operations
+- Role-based access control (RBAC)
+
+### Data Protection
+
+- MongoDB data encryption at rest (configure in production)
+- HTTPS/TLS in production
+- Input validation with express-validator
+- SQL/NoSQL injection prevention
 
 ## Contributing
 
