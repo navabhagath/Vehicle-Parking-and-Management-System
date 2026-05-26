@@ -18,6 +18,7 @@ A comprehensive full-stack application for managing vehicle parking facilities w
 ## Features
 
 ### Customer Features
+
 - **User Registration & Authentication**: Secure signup and login with OTP verification
 - **Parking Location Discovery**: Browse and search available parking locations
 - **Booking Management**: Reserve parking spaces and manage bookings
@@ -28,6 +29,7 @@ A comprehensive full-stack application for managing vehicle parking facilities w
 - **Real-time Notifications**: SMS and email notifications for bookings
 
 ### Vendor Features
+
 - **Parking Location Management**: Create and manage parking facilities
 - **Gate Pass Management**: Issue and control gate passes
 - **Analytics Dashboard**: Comprehensive statistics and revenue analytics
@@ -38,6 +40,7 @@ A comprehensive full-stack application for managing vehicle parking facilities w
 - **Profile Management**: Update vendor profile and business information
 
 ### Admin Features
+
 - **User Management**: Manage all user accounts and roles
 - **Vendor Management**: Oversee vendor accounts and approvals
 - **Dashboard Analytics**: System-wide analytics and insights
@@ -47,6 +50,7 @@ A comprehensive full-stack application for managing vehicle parking facilities w
 ## Tech Stack
 
 ### Backend
+
 - **Runtime**: Node.js
 - **Framework**: Express.js v5.2.1
 - **Database**: MongoDB with Mongoose v9.5.0
@@ -60,6 +64,7 @@ A comprehensive full-stack application for managing vehicle parking facilities w
 - **Testing**: Mocha, Chai, and NYC for coverage
 
 ### Frontend
+
 - **Framework**: Angular v17.3.0
 - **Styling**: Bootstrap v5.3.8, SCSS
 - **Charts**: ApexCharts, Chart.js
@@ -130,6 +135,7 @@ project-v1/
 ## Installation
 
 ### Prerequisites
+
 - **Node.js** v18 or higher
 - **npm** v9 or higher
 - **MongoDB** (local or Atlas)
@@ -138,16 +144,19 @@ project-v1/
 ### Backend Setup
 
 1. Navigate to the backend directory:
+
 ```bash
 cd backend
 ```
 
 2. Install dependencies:
+
 ```bash
 npm install
 ```
 
 3. Create a `.env` file in the backend directory with the following variables:
+
 ```env
 PORT=4000
 MONGODB_URI=mongodb://localhost:27017/vehicle-parking
@@ -162,11 +171,13 @@ SMTP_PASS=your_app_password
 ### Frontend Setup
 
 1. Navigate to the frontend directory:
+
 ```bash
 cd frontend
 ```
 
 2. Install dependencies:
+
 ```bash
 npm install
 ```
@@ -174,24 +185,27 @@ npm install
 ## Configuration
 
 ### Database Configuration
+
 Edit `backend/config/db.js` to configure your MongoDB connection:
 
 ```javascript
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const connectDB = async () => {
   try {
     await mongoose.connect(process.env.MONGODB_URI);
-    console.log('MongoDB Connected');
+    console.log("MongoDB Connected");
   } catch (error) {
-    console.error('Connection Error:', error);
+    console.error("Connection Error:", error);
     process.exit(1);
   }
 };
 ```
 
 ### Environment Variables
+
 Create `.env` files in both backend directories with necessary configurations:
+
 - `MONGODB_URI`: MongoDB connection string
 - `JWT_SECRET`: Secret key for JWT token signing
 - `PORT`: Server port (default: 4000)
@@ -202,6 +216,7 @@ Create `.env` files in both backend directories with necessary configurations:
 ### Backend
 
 Start the backend server:
+
 ```bash
 npm run dev
 ```
@@ -209,6 +224,7 @@ npm run dev
 The server will run on `http://localhost:4000`
 
 Swagger API documentation will be available at:
+
 - `http://localhost:4000/api-docs` (Main API)
 - `http://localhost:4000/api/admin/docs` (Admin API)
 - `http://localhost:4000/api/auth/docs` (Auth API)
@@ -216,6 +232,7 @@ Swagger API documentation will be available at:
 ### Frontend
 
 In a new terminal, start the Angular development server:
+
 ```bash
 npm start
 ```
@@ -225,11 +242,13 @@ The application will be available at `http://localhost:4200`
 ## API Documentation
 
 ### Authentication Endpoints
+
 - `POST /api/auth/register` - User registration
 - `POST /api/auth/login` - User login
 - `POST /api/auth/verify-otp` - OTP verification
 
 ### Customer Endpoints
+
 - `GET /api/customer/parking-locations` - Get available parking locations
 - `POST /api/customer/bookings` - Create a booking
 - `GET /api/customer/bookings` - Get user bookings
@@ -239,6 +258,7 @@ The application will be available at `http://localhost:4200`
 - `GET /api/customer/wallet` - Get wallet information
 
 ### Vendor Endpoints
+
 - `POST /api/vendor/parking-locations` - Create parking location
 - `GET /api/vendor/dashboard` - Vendor dashboard analytics
 - `GET /api/vendor/bookings` - View bookings
@@ -246,6 +266,7 @@ The application will be available at `http://localhost:4200`
 - `GET /api/vendor/analytics/revenue` - Revenue analytics
 
 ### Admin Endpoints
+
 - `GET /api/admin/users` - List all users
 - `GET /api/admin/vendors` - List all vendors
 - `GET /api/admin/dashboard` - Admin dashboard analytics
@@ -266,6 +287,7 @@ npm run coverage
 ```
 
 Test files are located in `backend/test/` directory organized by module:
+
 - `test/auth/` - Authentication tests
 - `test/admin/` - Admin functionality tests
 - `test/customer/` - Customer functionality tests
@@ -274,6 +296,7 @@ Test files are located in `backend/test/` directory organized by module:
 ## Key Features Implementation
 
 ### Authentication & Security
+
 - JWT-based authentication with refresh tokens
 - OTP verification for secure user registration
 - Password hashing with bcrypt
@@ -281,17 +304,20 @@ Test files are located in `backend/test/` directory organized by module:
 - Helmet security headers
 
 ### Payment & Transactions
+
 - Wallet system for customers
 - Transaction tracking and history
 - Multiple payment method support
 - Revenue tracking for vendors and admin
 
 ### Notifications
+
 - Email notifications via Nodemailer
 - SMS notifications for bookings and updates
 - Real-time status updates
 
 ### Analytics
+
 - Revenue analytics by vendor and date range
 - Booking statistics and trends
 - Vehicle usage analytics
@@ -300,16 +326,19 @@ Test files are located in `backend/test/` directory organized by module:
 ## Contributing
 
 1. Create a new branch for your feature:
+
 ```bash
 git checkout -b feature/your-feature-name
 ```
 
 2. Make your changes and commit:
+
 ```bash
 git commit -m "Add your feature description"
 ```
 
 3. Push to the branch:
+
 ```bash
 git push origin feature/your-feature-name
 ```
@@ -329,14 +358,17 @@ git push origin feature/your-feature-name
 ## Troubleshooting
 
 ### MongoDB Connection Issues
+
 - Ensure MongoDB is running locally or check your Atlas connection string
 - Verify `MONGODB_URI` in `.env` file
 
 ### Port Already in Use
+
 - Change the `PORT` variable in `.env` file
 - Or kill the process using the port: `lsof -ti:4000 | xargs kill -9` (Unix) or `netstat -ano | findstr :4000` (Windows)
 
 ### Missing Dependencies
+
 ```bash
 # Backend
 cd backend && npm install
